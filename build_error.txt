@@ -1,0 +1,35 @@
+$ tsc -b && vite build
+Warning: Route file "E:/Ahmeed/projects/nova/thenovagroupco-front/thenovagroupco-front/src/routes/packages/index.tsx" does not export a Route. This file will not be included in the route tree.
+
+If this file is not intended to be a route, you can exclude it using one of these options:
+  1. Rename the file to "E:\Ahmeed\projects\nova\thenovagroupco-front\thenovagroupco-front\src\routes\packages\-index.tsx" (prefix with "-")
+  2. Use 'routeFileIgnorePattern' in your config to match this file
+
+Current configuration:
+  routeFileIgnorePrefix: "-"
+  routeFileIgnorePattern: undefined
+Error: Conflicting configuration paths were found for the following routes: "/courses/", "/courses/".
+Please ensure each Route has a unique full path.
+Conflicting files: 
+ E:\Ahmeed\projects\nova\thenovagroupco-front\thenovagroupco-front\src\routes\courses\index.lazy.tsx
+ E:\Ahmeed\projects\nova\thenovagroupco-front\thenovagroupco-front\src\routes\_auth\courses\index.lazy.tsx
+
+    at file:///E:/Ahmeed/projects/nova/thenovagroupco-front/thenovagroupco-front/node_modules/@tanstack/router-generator/dist/esm/generator.js:154:19
+    at async generate (file:///E:/Ahmeed/projects/nova/thenovagroupco-front/thenovagroupco-front/node_modules/@tanstack/router-plugin/dist/esm/core/router-generator-plugin.js:41:7)
+    at async BasicMinimalPluginContext.configResolved (file:///E:/Ahmeed/projects/nova/thenovagroupco-front/thenovagroupco-front/node_modules/@tanstack/router-plugin/dist/esm/core/router-generator-plugin.js:59:9)
+    at async Promise.all (index 1)
+    at async resolveConfig (file:///E:/Ahmeed/projects/nova/thenovagroupco-front/thenovagroupco-front/node_modules/vite/dist/node/chunks/config.js:35675:2)
+    at async createBuilder (file:///E:/Ahmeed/projects/nova/thenovagroupco-front/thenovagroupco-front/node_modules/vite/dist/node/chunks/config.js:33875:19)
+    at async CAC.<anonymous> (file:///E:/Ahmeed/projects/nova/thenovagroupco-front/thenovagroupco-front/node_modules/vite/dist/node/cli.js:629:10)
+[36mvite v7.3.1 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32m✓[39m 78 modules transformed.
+[31m✗[39m Build failed in 655ms
+[31merror during build:
+[31mCould not resolve "./routes/packages/$courseId" from "src/routeTree.gen.ts"[31m
+file: [36mE:/Ahmeed/projects/nova/thenovagroupco-front/thenovagroupco-front/src/routeTree.gen.ts[31m
+    at getRollupError (file:///E:/Ahmeed/projects/nova/thenovagroupco-front/thenovagroupco-front/node_modules/rollup/dist/es/shared/parseAst.js:402:41)
+    at error (file:///E:/Ahmeed/projects/nova/thenovagroupco-front/thenovagroupco-front/node_modules/rollup/dist/es/shared/parseAst.js:398:42)
+    at ModuleLoader.handleInvalidResolvedId (file:///E:/Ahmeed/projects/nova/thenovagroupco-front/thenovagroupco-front/node_modules/rollup/dist/es/shared/node-entry.js:21687:24)
+    at file:///E:/Ahmeed/projects/nova/thenovagroupco-front/thenovagroupco-front/node_modules/rollup/dist/es/shared/node-entry.js:21647:26[39m
+error: script "build" exited with code 1

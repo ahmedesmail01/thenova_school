@@ -1,0 +1,3 @@
+$ tsc -b && vite build
+src/components/layout/NavbarAuth.tsx(115,21): error TS2322: Type '"/_auth/library"' is not assignable to type '"." | ".." | "/" | "/about" | "/login" | "/register" | "/dashboard" | "/library" | "/courses/$courseId" | "/courses"'.
+src/routes/register.lazy.tsx(41,16): error TS2322: Type '"/_auth/dashboard"' is not assignable to type '"." | ".." | "/" | "/about" | "/login" | "/register" | "/dashboard" | "/library" | "/courses/$courseId" | "/courses"'.
