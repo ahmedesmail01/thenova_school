@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {
   createFileRoute,
   redirect,
@@ -6,9 +6,8 @@ import {
   useNavigate,
 } from "@tanstack/react-router";
 import { useAuthStore } from "../features/auth/useAuthStore";
-import { Sidebar } from "../components/layout/Sidebar";
-import { AuthNavbar } from "../components/layout/AuthNavbar";
-import { cn } from "../lib/utils";
+import { Navbar } from "../components/layout/Navbar";
+import { Footer } from "../components/layout/Footer";
 
 export const Route = createFileRoute("/_auth")({
   beforeLoad: async () => {
@@ -28,8 +27,6 @@ export const Route = createFileRoute("/_auth")({
 });
 
 function AuthLayout() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const navigate = useNavigate();
 
@@ -40,35 +37,12 @@ function AuthLayout() {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="min-h-screen bg-dash-bg flex">
-      {/* Sidebar Overlay for Mobile */}
-      {isMobileOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden animate-in fade-in duration-300"
-          onClick={() => setIsMobileOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <Sidebar
-        isCollapsed={isCollapsed}
-        setIsCollapsed={setIsCollapsed}
-        isMobileOpen={isMobileOpen}
-        setIsMobileOpen={setIsMobileOpen}
-      />
-
-      {/* Main Content */}
-      <div
-        className={cn(
-          "flex-1 flex flex-col transition-all duration-300 min-w-0",
-          isCollapsed ? "lg:pl-20" : "lg:pl-64",
-        )}
-      >
-        <AuthNavbar onMenuClick={() => setIsMobileOpen(true)} />
-        <main className="flex-1 p-4 lg:p-8">
-          <Outlet />
-        </main>
-      </div>
+    <div className="min-h-screen bg-dash-bg flex flex-col font-poppins">
+      <Navbar />
+      <main className="flex-1 pt-16">
+        <Outlet />
+      </main>
+      <Footer />
     </div>
   );
 }

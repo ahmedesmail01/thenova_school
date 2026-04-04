@@ -20,7 +20,7 @@ export const Route = createLazyFileRoute("/login")({
 function LoginPage() {
   const navigate = useNavigate();
   const search = useSearch({ from: "/login" }) as { redirect?: string };
-  const redirectParam = search.redirect || "/dashboard";
+  const redirectParam = search.redirect || "/profile";
   const setUser = useAuthStore((s) => s.setUser);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [showPassword, setShowPassword] = useState(false);
@@ -58,6 +58,7 @@ function LoginPage() {
           setUser(meResponse.data.user ?? meResponse.data);
         }
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         navigate({ to: redirectParam as any });
       } catch (error) {
         console.error("Failed to load authenticated user after login:", error);
@@ -70,6 +71,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       navigate({ to: redirectParam as any });
     }
   }, [isAuthenticated, navigate, redirectParam]);

@@ -45,7 +45,7 @@ export function Navbar() {
   void setLoginModalOpen;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 backdrop-blur-md  h-16">
+    <nav className="fixed top-0 left-0 right-0 z-40 bg-brand-navy  h-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
@@ -74,12 +74,12 @@ export function Navbar() {
           >
             Home
           </Link>
-          <Link
+          {/* <Link
             to="/packages"
             className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
           >
             Packages
-          </Link>
+          </Link> */}
           <Link
             to="/courses"
             className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
@@ -148,7 +148,7 @@ export function Navbar() {
                     <ChevronRight className="w-4 h-4 text-dash-muted opacity-0 group-hover:opacity-100 transition-all translate-x-[-4px] group-hover:translate-x-0" />
                   </Link>
 
-                  <Link
+                  {/* <Link
                     to="/dashboard"
                     onClick={() => setShowUserDropdown(false)}
                     className="group flex items-center justify-between w-full p-2.5 rounded-xl text-dash-text hover:bg-dash-bg transition-all mt-1"
@@ -162,7 +162,7 @@ export function Navbar() {
                       </span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-dash-muted opacity-0 group-hover:opacity-100 transition-all translate-x-[-4px] group-hover:translate-x-0" />
-                  </Link>
+                  </Link> */}
 
                   <div className="h-px bg-dash-border/50 my-2 mx-2" />
 
