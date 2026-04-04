@@ -2,16 +2,20 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Button } from "../ui/Button";
 import { useAuthStore } from "../../features/auth/useAuthStore";
+import { useUserData } from "../../features/auth/useUserData";
 import {
   User as UserIcon,
   LogOut,
   LayoutDashboard,
   ChevronDown,
+  ChevronRight,
 } from "lucide-react";
 const logoImg = "/images/nova-logo.png";
 
 export function Navbar() {
-  const { setLoginModalOpen, isAuthenticated, user, logout } = useAuthStore();
+  const { setLoginModalOpen, isAuthenticated, logout } = useAuthStore();
+  const { data: userData } = useUserData();
+  const user = userData?.["user data"];
   const [menuOpen, setMenuOpen] = useState(false);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -71,9 +75,7 @@ export function Navbar() {
             Home
           </Link>
           <Link
-            to="/"
-            hash="packages"
-            activeOptions={{ includeHash: true }}
+            to="/packages"
             className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
           >
             Packages
@@ -105,30 +107,76 @@ export function Navbar() {
 
               {/* Desktop Dropdown Menu */}
               {showUserDropdown && (
-                <div className="absolute right-0 mt-2 w-48 bg-brand-navy border border-brand-border rounded-xl shadow-2xl py-2 z-50 animate-in fade-in zoom-in duration-200">
-                  <Link
-                    to="/dashboard"
-                    onClick={() => setShowUserDropdown(false)}
-                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-white hover:bg-white/5 transition-colors"
-                  >
-                    <LayoutDashboard className="w-4 h-4" />
-                    Dashboard
-                  </Link>
+                <div className="absolute right-0 mt-2 w-64 bg-dash-sidebar border border-dash-border rounded-2xl shadow-xl p-2 z-50 animate-in fade-in zoom-in duration-200">
+                  {/* User Header */}
+                  <div className="flex items-center gap-3 p-3 border-b border-dash-border/50 mb-2">
+                    <div className="w-12 h-12 rounded-full overflow-hidden bg-dash-bg border border-dash-border flex items-center justify-center shrink-0">
+                      {user?.image ? (
+                        <img
+                          src={user.image}
+                          alt={user.first_name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <UserIcon className="w-6 h-6 text-dash-muted" />
+                      )}
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <span className="text-sm font-bold  text-dash-accent truncate">
+                        {user?.first_name} {user?.last_name}
+                      </span>
+                      <span className="text-xs text-dash-muted truncate">
+                        {user?.email}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Menu Items */}
                   <Link
                     to="/profile"
                     onClick={() => setShowUserDropdown(false)}
-                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-text-secondary hover:text-white hover:bg-white/5 transition-colors"
+                    className="group flex items-center justify-between w-full p-2.5 rounded-xl text-dash-text hover:bg-dash-bg transition-all"
                   >
-                    <UserIcon className="w-4 h-4" />
-                    Profile
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-dash-bg rounded-lg group-hover:bg-white transition-colors">
+                        <UserIcon className="w-4 h-4 text-dash-muted group-hover:text-dash-accent" />
+                      </div>
+                      <span className="text-sm font-medium text-dash-text">
+                        View Profile
+                      </span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-dash-muted opacity-0 group-hover:opacity-100 transition-all translate-x-[-4px] group-hover:translate-x-0" />
                   </Link>
-                  <hr className="border-brand-border my-1 mx-2" />
+
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setShowUserDropdown(false)}
+                    className="group flex items-center justify-between w-full p-2.5 rounded-xl text-dash-text hover:bg-dash-bg transition-all mt-1"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-dash-bg rounded-lg group-hover:bg-white transition-colors">
+                        <LayoutDashboard className="w-4 h-4 text-dash-muted group-hover:text-dash-accent" />
+                      </div>
+                      <span className="text-sm font-medium text-dash-text">
+                        Dashboard
+                      </span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-dash-muted opacity-0 group-hover:opacity-100 transition-all translate-x-[-4px] group-hover:translate-x-0" />
+                  </Link>
+
+                  <div className="h-px bg-dash-border/50 my-2 mx-2" />
+
                   <button
                     onClick={handleLogout}
-                    className="flex items-center gap-2 w-full px-4 py-2.5 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
+                    className="group flex items-center justify-between w-full p-2.5 rounded-xl text-red-500 hover:bg-red-50 transition-all"
                   >
-                    <LogOut className="w-4 h-4" />
-                    Logout
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 bg-red-50 rounded-lg group-hover:bg-white transition-colors">
+                        <LogOut className="w-4 h-4" />
+                      </div>
+                      <span className="text-sm font-medium">Logout</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all translate-x-[-4px] group-hover:translate-x-0" />
                   </button>
                 </div>
               )}
@@ -179,7 +227,7 @@ export function Navbar() {
 
       {/* Mobile dropdown */}
       <div
-        className={`md:hidden absolute top-16 left-0 right-0 bg-brand-navy/95 border-b border-brand-border overflow-hidden transition-all duration-300 ${menuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"}`}
+        className={`md:hidden absolute top-16 left-0 right-0 bg-brand-navy/95 border-b border-brand-border  transition-all duration-300 ${menuOpen ? "max-h-120 opacity-100" : "max-h-0 opacity-0"}`}
       >
         <div className="p-4 flex flex-col gap-2">
           <Link
@@ -191,9 +239,7 @@ export function Navbar() {
             Home
           </Link>
           <Link
-            to="/"
-            hash="packages"
-            activeOptions={{ includeHash: true }}
+            to="/packages"
             onClick={() => setMenuOpen(false)}
             className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
           >
@@ -233,13 +279,14 @@ export function Navbar() {
                   <UserIcon className="w-5 h-5" />
                   <span className="font-medium">Profile</span>
                 </Link>
-                <button
+                <Button
                   onClick={handleLogout}
-                  className="flex items-center gap-3 text-red-400 hover:text-red-300 p-3 rounded-lg hover:bg-red-500/10 transition-colors text-left"
+                  variant="outline"
+                  className="w-full flex items-center justify-center gap-2 border-red-500/30 text-red-400 hover:text-red-300 hover:border-red-500/50 hover:bg-red-500/10"
                 >
-                  <LogOut className="w-5 h-5" />
-                  <span className="font-medium">Logout</span>
-                </button>
+                  <LogOut className="w-4 h-4" />
+                  Logout
+                </Button>
               </>
             ) : (
               <>

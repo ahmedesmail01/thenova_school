@@ -23,21 +23,53 @@ export interface UserPackage {
 }
 
 export interface RankInfo {
+  icon: string | null;
   name: string;
   image: string | null;
   package: string;
 }
 
+export interface DownlineRequirement {
+  rank_id: number;
+  count: number;
+}
+
+export interface Rank {
+  id: number;
+  name: string;
+  package: string;
+  left_volume: number;
+  right_volume: number;
+  direct_referrals: number;
+  downline_requirements: {
+    left: DownlineRequirement;
+    right: DownlineRequirement;
+  };
+  created_at: string;
+  updated_at: string;
+  image: string | null;
+  icon: string;
+}
+
+export interface DownlineProgress {
+  required_rank: Rank;
+  required_count: number;
+  current_count: number;
+}
+
 export interface NextRankInfo {
   name: string;
+  icon: string;
   left_volume: number;
-  user_left_volume: number | null;
+  user_left_volume: string | null;
   right_volume: number;
-  user_right_volume: number | null;
-  left_referrals: number;
-  user_left_referrals: number;
-  right_referrals: number;
-  user_right_referrals: number;
+  user_right_volume: string | null;
+  direct_referrals: number;
+  user_direct_referrals: number;
+  user_downline_progress: {
+    left: DownlineProgress;
+    right: DownlineProgress;
+  } | null;
 }
 
 export interface WeeklyEarning {

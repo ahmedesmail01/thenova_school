@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import {
   createRootRoute,
   Outlet,
+  ScrollRestoration,
   useRouterState,
 } from "@tanstack/react-router";
 // import { TanStackRouterDevtools } from "@tanstack/router-devtools";
@@ -25,8 +26,23 @@ function RootLayout() {
     bootstrap();
   }, [bootstrap]);
 
+  // Manual scroll to top on route change as a fallback for ScrollRestoration
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   // Define public pages that should have the default navbar/footer
-  const publicPages = ["/", "/about", "/courses", "/library"];
+  const publicPages = [
+    "/",
+    "/about",
+    "/courses",
+    "/library",
+    "/packages",
+    "/terms-and-conditions",
+    "/privacy-policy",
+    "/disclaimer",
+    "/cookie-policy",
+  ];
   const isPublicPage =
     publicPages.includes(location.pathname) ||
     location.pathname.startsWith("/courses/");
@@ -41,6 +57,7 @@ function RootLayout() {
 
   return (
     <div className="min-h-screen bg-brand-navy text-text-primary flex flex-col font-sans">
+      <ScrollRestoration />
       <Toaster position="top-center" reverseOrder={false} />
       {/* Show Navbar only on public pages when not logged in, or if explicitly requested */}
       {isPublicPage && <Navbar />}

@@ -1,4 +1,12 @@
-import { Bell, ChevronDown, LogOut, User, Menu } from "lucide-react";
+import {
+  Bell,
+  ChevronDown,
+  ChevronRight,
+  LogOut,
+  User,
+  Menu,
+  LayoutDashboard,
+} from "lucide-react";
 import { useAuthStore } from "../../features/auth/useAuthStore";
 import { useState } from "react";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
@@ -95,20 +103,83 @@ export function AuthNavbar({ onMenuClick }: AuthNavbarProps) {
                 className="fixed inset-0 z-10"
                 onClick={() => setIsDropdownOpen(false)}
               />
-              <div className="absolute right-0 mt-2 w-48 bg-dash-sidebar border border-dash-border rounded-xl shadow-lg py-2 z-20">
+              <div className="absolute right-0 mt-2 w-64 bg-dash-sidebar border border-dash-border rounded-2xl shadow-xl p-2 z-20 animate-in fade-in zoom-in duration-200">
+                {/* User Header */}
+                <div className="flex items-center gap-3 p-3 border-b border-dash-border/50 mb-2">
+                  <div className="w-12 h-12 rounded-full overflow-hidden bg-dash-bg border border-dash-border flex items-center justify-center shrink-0">
+                    <img
+                      src={
+                        user?.["user data"].image ??
+                        "/images/default-avatar.png"
+                      }
+                      alt={user?.["user data"].first_name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.onerror = null;
+                        target.src = "/images/default-avatar.png";
+                      }}
+                    />
+                  </div>
+                  <div className="flex flex-col min-w-0 text-left">
+                    <span className="text-sm font-bold !text-dash-text truncate">
+                      {user?.["user data"].first_name}{" "}
+                      {user?.["user data"].last_name}
+                    </span>
+                    <span className="text-xs text-dash-muted truncate">
+                      {user?.["user data"].email}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Menu Items */}
                 <Link
                   to="/profile"
                   onClick={() => setIsDropdownOpen(false)}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-dash-text hover:bg-dash-bg transition-colors"
+                  className="group flex items-center justify-between w-full p-2.5 rounded-xl text-dash-text hover:bg-dash-bg transition-all"
                 >
-                  <User size={16} className="text-dash-muted" /> Profile
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-dash-bg rounded-lg group-hover:bg-white transition-colors">
+                      <User
+                        size={16}
+                        className="text-dash-muted group-hover:text-dash-accent"
+                      />
+                    </div>
+                    <span className="text-sm font-medium">View Profile</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-dash-muted opacity-0 group-hover:opacity-100 transition-all translate-x-[-4px] group-hover:translate-x-0" />
                 </Link>
-                <hr className="my-1 border-dash-border" />
+
+                <Link
+                  to="/dashboard"
+                  onClick={() => setIsDropdownOpen(false)}
+                  className="group flex items-center justify-between w-full p-2.5 rounded-xl text-dash-text hover:bg-dash-bg transition-all mt-1"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-dash-bg rounded-lg group-hover:bg-white transition-colors">
+                      <LayoutDashboard
+                        size={16}
+                        className="text-dash-muted group-hover:text-dash-accent"
+                      />
+                    </div>
+                    <span className="text-sm font-medium">Dashboard</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-dash-muted opacity-0 group-hover:opacity-100 transition-all translate-x-[-4px] group-hover:translate-x-0" />
+                </Link>
+
+                <div className="h-px bg-dash-border/50 my-2 mx-2" />
+
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                  className="group flex items-center justify-between w-full p-2.5 rounded-xl text-red-500 hover:bg-red-50 transition-all"
                 >
-                  <LogOut size={16} /> Logout
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-red-50 rounded-lg group-hover:bg-white transition-colors">
+                      <LogOut size={16} />
+                    </div>
+                    <span className="text-sm font-medium">Logout</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-all translate-x-[-4px] group-hover:translate-x-0" />
                 </button>
               </div>
             </>

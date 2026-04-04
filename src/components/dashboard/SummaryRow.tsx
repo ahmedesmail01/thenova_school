@@ -9,8 +9,8 @@ interface SummaryRowProps {
 const SummaryRow = ({ data }: SummaryRowProps) => {
   const dollarIcon = "/icons/dollar.png";
   const trophyIcon = "/icons/free-pack.png";
-  const zapIcon = "/icons/nova-rise-pack.png";
-  const walletIcon = "/icons/bronze-pack.png";
+  // const zapIcon = "/icons/nova-rise-pack.png";
+  // const walletIcon = "/icons/bronze-pack.png";
 
   // const totalVolume =
   //   (data?.nowCvCounts?.left_cv_count || 0) +
@@ -33,14 +33,15 @@ const SummaryRow = ({ data }: SummaryRowProps) => {
         label="Current Package"
       />
       <SummaryCard
-        iconSrc={zapIcon}
+        iconSrc={data?.next_rank.icon}
         title={data?.next_rank?.name || "Next Rank"}
         label="Next Rank"
       />
       <SummaryCard
-        iconSrc={walletIcon}
+        // iconSrc={walletIcon}
+        iconSrc={data?.rank?.icon || ""}
         title={data?.rank?.name || "No Rank"}
-        label={data?.rank?.name || ""}
+        label={"Current Rank"}
       />
     </div>
   );

@@ -1,4 +1,9 @@
-import { createLazyFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
+import {
+  createLazyFileRoute,
+  Link,
+  useNavigate,
+  useSearch,
+} from "@tanstack/react-router";
 import { useState } from "react";
 import { Stepper } from "../components/ui/Stepper";
 import { useAuthStore } from "../features/auth/useAuthStore";
@@ -24,7 +29,11 @@ const STEPS = [
 
 function RegisterPage() {
   const navigate = useNavigate();
-  const search = useSearch({ from: "/register" }) as { sponsorId?: string };
+  const search = useSearch({ from: "/register" }) as {
+    sponsorId?: string;
+    redirect?: string;
+  };
+  const redirectParam = search.redirect || "/dashboard";
   const setUser = useAuthStore((s) => s.setUser);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [step, setStep] = useState(search.sponsorId ? 1 : 0);
@@ -39,7 +48,7 @@ function RegisterPage() {
   const back = () => setStep((s) => s - 1);
 
   if (isAuthenticated) {
-    navigate({ to: "/dashboard" });
+    navigate({ to: redirectParam as any });
     return null;
   }
 
@@ -59,7 +68,9 @@ function RegisterPage() {
             >
               ×
             </button>
-            <img src={logo} alt="Nova Group" className="h-12 sm:h-16" />
+            <Link to="/">
+              <img src={logo} alt="Nova Group" className="h-12 sm:h-16" />
+            </Link>
           </div>
 
           <div className="text-center mb-[66px]">
@@ -104,7 +115,7 @@ function RegisterPage() {
                 onBack={back}
                 onSuccess={(user) => {
                   setUser(user);
-                  navigate({ to: "/dashboard" });
+                  navigate({ to: redirectParam as any });
                 }}
               />
             )}
@@ -113,6 +124,7 @@ function RegisterPage() {
             Already have an account?{" "}
             <Link
               to="/login"
+              search={search.redirect ? { redirect: search.redirect } : undefined}
               className="text-white font-semibold hover:text-brand-blue-light underline underline-offset-2 transition-colors"
             >
               Login →

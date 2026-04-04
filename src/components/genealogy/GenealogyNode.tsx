@@ -13,6 +13,9 @@ export function GenealogyNode({
   rankName,
   subscriptionName,
   color,
+  userPackage,
+  rank,
+  rankIcon,
 }: NodeProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,6 +27,9 @@ export function GenealogyNode({
 
   // Use the detailed user data for this node if available from the downline fetch
   const nodeUser = downline?.members?.user;
+  const packageInfo = nodeUser?.member?.subscription?.package;
+  const rankInfo = nodeUser?.member?.rank;
+
   const displayFullName = nodeUser
     ? nodeUser.first_name
       ? `${nodeUser.first_name} ${nodeUser.last_name || ""}`.trim()
@@ -31,6 +37,11 @@ export function GenealogyNode({
     : fullName;
   const displayImage = nodeUser?.image || userImage;
   const displayIdCode = nodeUser?.id_code || idCode;
+
+  // Prioritize data from downline fetch for the current node
+  const displayRank = rankInfo?.name || rank;
+  const displayPackage = packageInfo?.name || userPackage;
+  const displayRankIcon = rankInfo?.icon || rankIcon;
 
   if (!userId) {
     return null;
@@ -44,6 +55,9 @@ export function GenealogyNode({
         userImage={displayImage}
         rankName={rankName}
         color={color}
+        rank={displayRank}
+        userPackage={displayPackage}
+        rankIcon={displayRankIcon}
         onClick={() => setIsModalOpen(true)}
       />
 
@@ -54,9 +68,10 @@ export function GenealogyNode({
         idCode={displayIdCode}
         fullName={displayFullName}
         userImage={displayImage}
-        rankName={rankName}
         subscriptionName={subscriptionName}
-        color={color}
+        rank={displayRank}
+        userPackage={displayPackage}
+        rankIcon={displayRankIcon}
       />
 
       {/* Expand Button */}
@@ -97,20 +112,13 @@ export function GenealogyNode({
                 {/* vertical line to child */}
                 <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-0.5 h-12 bg-slate-200" />
                 <GenealogyNode
-                  userId={leftLeg.user_id || leftLeg.id}
-                  idCode={leftLeg.user_id_code || leftLeg.id_code!}
-                  fullName={
-                    leftLeg.user_first_name
-                      ? `${leftLeg.user_first_name} ${leftLeg.user_last_name}`.trim()
-                      : leftLeg.user_name || leftLeg.full_name!
-                  }
-                  userImage={leftLeg.user_image}
+                  userId={leftLeg.id}
+                  idCode={leftLeg.id_code}
+                  fullName={leftLeg.full_name}
+                  userImage={leftLeg.image}
                   rankName={leftLeg.rank_name}
-                  subscriptionName={
-                    typeof leftLeg.subscription === "string"
-                      ? leftLeg.subscription
-                      : leftLeg.subscription?.name
-                  }
+                  rankIcon={leftLeg.rank_icon || undefined}
+                  userPackage={leftLeg.pack_name || undefined}
                   color="blue"
                 />
               </div>
@@ -123,20 +131,13 @@ export function GenealogyNode({
                 {/* vertical line to child */}
                 <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-0.5 h-12 bg-slate-200" />
                 <GenealogyNode
-                  userId={rightLeg.user_id || rightLeg.id}
-                  idCode={rightLeg.user_id_code || rightLeg.id_code!}
-                  fullName={
-                    rightLeg.user_first_name
-                      ? `${rightLeg.user_first_name} ${rightLeg.user_last_name}`.trim()
-                      : rightLeg.user_name || rightLeg.full_name!
-                  }
-                  userImage={rightLeg.user_image}
+                  userId={rightLeg.id}
+                  idCode={rightLeg.id_code}
+                  fullName={rightLeg.full_name}
+                  userImage={rightLeg.image}
                   rankName={rightLeg.rank_name}
-                  subscriptionName={
-                    typeof rightLeg.subscription === "string"
-                      ? rightLeg.subscription
-                      : rightLeg.subscription?.name
-                  }
+                  rankIcon={rightLeg.rank_icon || undefined}
+                  userPackage={rightLeg.pack_name || undefined}
                   color="teal"
                 />
               </div>

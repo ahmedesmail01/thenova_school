@@ -19,6 +19,7 @@ const profileSchema = z.object({
   last_name: z.string().max(100).optional().nullable(),
   email: z.string().email().optional().nullable(),
   phone: z.string().optional().nullable(),
+  country: z.string().optional().nullable(),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -54,6 +55,7 @@ export function EditableProfileForm({ userData }: EditableProfileFormProps) {
           ? userData.phone
           : `+20${userData.phone}`
         : "+20",
+      country: userData.country,
     },
   });
 
@@ -66,6 +68,7 @@ export function EditableProfileForm({ userData }: EditableProfileFormProps) {
         last_name: data.last_name || null,
         email: data.email || null,
         phone: data.phone || null,
+        country: data.country || null,
       };
       const response = await api.post("user/profile/request-update", payload);
       return response.data;
@@ -177,8 +180,11 @@ export function EditableProfileForm({ userData }: EditableProfileFormProps) {
                   userData.country?.toLowerCase() === "egypt" ? "eg" : "eg"
                 }
                 value={watch("phone") || ""}
-                onChange={(phone) => {
+                onChange={(phone, meta) => {
                   setValue("phone", phone, { shouldDirty: true });
+                  if (meta?.country?.name) {
+                    setValue("country", meta.country.name, { shouldDirty: true });
+                  }
                 }}
                 className="w-full"
                 forceDialCode

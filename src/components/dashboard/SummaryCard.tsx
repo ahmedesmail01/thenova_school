@@ -20,7 +20,7 @@ export default function SummaryCard({
       <div className="flex justify-between items-start">
         <div className="p-3 rounded-2xl  text-blue-600 group-hover:scale-110 transition-transform">
           {iconSrc ? (
-            <img src={iconSrc} alt="icon" />
+            <img src={iconSrc} alt="icon" className="w-[65px]" />
           ) : (
             Icon && <Icon size={24} />
           )}

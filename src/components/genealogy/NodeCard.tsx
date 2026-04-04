@@ -7,6 +7,9 @@ interface NodeCardProps {
   rankName?: string | null;
   color: "red" | "blue" | "teal";
   onClick: () => void;
+  rank?: string;
+  userPackage?: string;
+  rankIcon?: string | null;
 }
 
 export function NodeCard({
@@ -15,6 +18,9 @@ export function NodeCard({
   userImage,
   rankName,
   color,
+  rank,
+  userPackage,
+  rankIcon,
   onClick,
 }: NodeCardProps) {
   const scheme = COLOR_SCHEMES[color];
@@ -22,10 +28,10 @@ export function NodeCard({
   return (
     <div
       onClick={onClick}
-      className="p-1.5 rounded-[2.5rem] bg-white border border-slate-200 shadow-sm transition-transform hover:scale-[1.02] duration-300 relative z-10 cursor-pointer"
+      className={`p-1.5 rounded-[24px] bg-white border ${scheme.border} shadow-sm transition-transform hover:scale-[1.02] duration-300 relative z-10 cursor-pointer`}
     >
       <div
-        className={`p-6 rounded-4xl border ${scheme.border} bg-linear-to-br ${scheme.bg} shadow-inner w-56 aspect-4/5 flex flex-col items-center justify-center relative overflow-hidden group`}
+        className={`p-6 rounded-[22px] border ${scheme.border} bg-linear-to-br ${scheme.bg} shadow-inner w-56 aspect-4/5 flex flex-col items-center justify-center relative overflow-hidden group`}
       >
         {/* Background Decorative Circular Shapes */}
         <div
@@ -70,6 +76,38 @@ export function NodeCard({
           <p className="text-white font-normal text-sm opacity-90 mb-1 mt-1">
             ID: {idCode || "--"}
           </p>
+          {rank ? (
+            <div className="flex flex-col items-center gap-1 mb-1">
+              {rankIcon && (
+                <img
+                  src={rankIcon}
+                  alt={rank}
+                  className="w-8 h-8 object-contain mb-1 drop-shadow-sm"
+                  onError={(e) => (e.currentTarget.style.display = "none")}
+                />
+              )}
+              <p className="text-white/90 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 bg-white/15 backdrop-blur-md rounded-full border border-white/20 shadow-sm leading-tight">
+                {rank}
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-1 mb-1">
+              <p className="text-white/90 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 bg-white/15 backdrop-blur-md rounded-full border border-white/20 shadow-sm leading-tight">
+                {"non ranked"}
+              </p>
+            </div>
+          )}
+          {userPackage ? (
+            <p className="text-white/90 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 bg-white/10 backdrop-blur-sm rounded-md border border-white/10 shadow-inner mt-1">
+              PKG: {userPackage}
+            </p>
+          ) : (
+            <div className="flex flex-col items-center gap-1 mb-1">
+              <p className="text-white/90 text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 bg-white/15 backdrop-blur-md rounded-full border border-white/20 shadow-sm leading-tight">
+                {"non package"}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

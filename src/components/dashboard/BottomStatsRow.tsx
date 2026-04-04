@@ -50,16 +50,13 @@ export default function BottomStatsRow({ data }: BottomStatsRowProps) {
       label: "Current Package",
     },
     {
-      iconSrc: "/icons/silver-pack-icon.png",
+      iconSrc: data?.rank.icon || "",
       title: data?.rank?.package || "No Rank",
       label: data?.rank?.package || "No Rank",
     },
     {
       iconSrc: "/icons/referred-members-icon.png",
-      title: (
-        (data?.next_rank?.user_left_referrals || 0) +
-        (data?.next_rank?.user_right_referrals || 0)
-      ).toString(),
+      title: (data?.next_rank?.user_direct_referrals || 0).toString(),
       label: "Referred Members",
     },
     {

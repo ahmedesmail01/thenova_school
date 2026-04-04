@@ -210,18 +210,39 @@ export const useUserByIdData = (userId: string | number | null | undefined) => {
  */
 export interface DownlineMember {
   id: number;
-  rank_id: number | null;
+  id_code: number;
+  full_name: string;
+  image: string | null;
   rank_name: string | null;
-  user_name: string;
-  user_id_code: number;
-  user_first_name: string;
-  user_last_name: string;
-  user_image: string | null;
-  // keep old type properties optional to not break existing usage
-  user_id?: number;
-  id_code?: number;
-  full_name?: string;
-  subscription?: { name: string } | string | null;
+  rank_icon: string | null;
+  pack_name: string | null;
+  pack_icon: string | null;
+}
+
+export interface LeanUserData {
+  id: number;
+  id_code: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+  image: string | null;
+  status?: string;
+  email?: string;
+  member: {
+    current_cv: number;
+    totla_left_volume: number;
+    totla_right_volume: number;
+    subscription: {
+      package: {
+        name: string;
+        icon: string | null;
+      };
+    };
+    rank: {
+      name: string;
+      icon: string | null;
+    };
+  };
 }
 
 export interface DownlineResponse {
@@ -230,7 +251,7 @@ export interface DownlineResponse {
   members: {
     left_leg_member: DownlineMember | null;
     right_leg_member: DownlineMember | null;
-    user?: StrictUserData;
+    user: LeanUserData;
   };
 }
 

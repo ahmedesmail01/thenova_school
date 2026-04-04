@@ -138,8 +138,8 @@ export function PaymentChoiceModal({
         </div>
 
         <Button
-          variant="ghost"
-          className="w-full text-slate-400 hover:text-slate-600"
+          // variant="ghost"
+          className="w-full !text-slate-400 bg-transparent hover:!text-slate-200"
           onClick={onClose}
           disabled={isSubscribing}
         >

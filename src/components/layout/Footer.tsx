@@ -60,14 +60,36 @@ export function Footer() {
                 </button>
               </li>
               <li>
-                <button className="hover:text-brand-blue-light transition-colors">
+                <Link
+                  to="/terms-and-conditions"
+                  className="hover:text-brand-blue-light transition-colors"
+                >
                   Terms and Conditions
-                </button>
+                </Link>
               </li>
               <li>
-                <button className="hover:text-brand-blue-light transition-colors">
+                <Link
+                  to="/privacy-policy"
+                  className="hover:text-brand-blue-light transition-colors"
+                >
                   Privacy Policy
-                </button>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/disclaimer"
+                  className="hover:text-brand-blue-light transition-colors"
+                >
+                  Disclaimer
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/cookie-policy"
+                  className="hover:text-brand-blue-light transition-colors"
+                >
+                  Cookie Policy
+                </Link>
               </li>
             </ul>
           </div>
@@ -106,7 +128,7 @@ export function Footer() {
       </div>
 
       <div className="mt-16 w-full">
-        <div className="bg-gradient-to-r from-[#245d8f] to-[#163b63] px-4 sm:px-6 lg:px-8 py-4 text-center text-[11px] text-text-secondary">
+        <div className="bg-linear-to-r from-[#245d8f] to-[#163b63] px-4 sm:px-6 lg:px-8 py-4 text-center text-[11px] text-text-secondary">
           <p>
             © {new Date().getFullYear()} The Nova Group CO. All Rights Reserved.
           </p>

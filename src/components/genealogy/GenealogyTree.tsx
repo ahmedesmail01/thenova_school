@@ -55,7 +55,7 @@ export function GenealogyTree({ userData }: GenealogyTreeProps) {
           idCode={idCode}
           fullName={fullName}
           userImage={userImage}
-          rankName={null} // Rank isn't available in root profile response directly in same format
+          userPackage={subscriptionName || undefined}
           subscriptionName={subscriptionName}
           color="red"
           isRoot={true}

@@ -48,7 +48,8 @@ export function UserInfoModal({ isOpen, onClose, userId }: UserInfoModalProps) {
 
     const usr = data.user;
     // const initial = usr.first_name ? usr.first_name[0] : usr.username[0];
-    const fallbackSrc = `https://api.dicebear.com/7.x/avataaars/svg?seed=${usr.username}`;
+    const fallbackSrc = `/images/game-avatar.png`;
+    // const fallbackSrc = `https://api.dicebear.com/7.x/avataaars/svg?seed=${usr.username}`;
     const isValidSrc =
       usr.image &&
       usr.image !== "null" &&
@@ -142,7 +143,7 @@ export function UserInfoModal({ isOpen, onClose, userId }: UserInfoModalProps) {
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-white shadow-sm overflow-hidden flex items-center justify-center p-0.5 border border-slate-100">
                   <img
-                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${usr.member.sponsor.user.username}`}
+                    src={`${usr.member.sponsor.user.image ? usr.member.sponsor.user.image : `/images/game-avatar.png`}`}
                     className="w-full h-full object-cover rounded-full"
                     alt="Sponsor"
                   />

@@ -3,7 +3,6 @@ import { HeroSection } from "../components/sections/HeroSection";
 import { FocusSection } from "../components/sections/FocusSection";
 import {
   StorySection,
-  PackagesSection,
   EventsSection,
 } from "../components/sections/OtherSections";
 import OurScannersSection from "../components/sections/OurScannersSection";
@@ -19,7 +18,6 @@ function Index() {
       <HeroSection />
       <FocusSection />
       <StorySection />
-      {/* <PackagesSection /> */}
       <OurScannersSection />
       <TradeAlertSection />
       <EventsSection />

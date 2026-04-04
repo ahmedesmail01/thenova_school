@@ -1,30 +1,34 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { Ticket, Eye, X } from "lucide-react";
+import { Ticket, Eye, X, Loader2 } from "lucide-react";
 import { useState } from "react";
+import api from "../../lib/api";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 export const Route = createLazyFileRoute("/_auth/support")({
   component: SupportRouteComponent,
 });
 
 type SupportTicket = {
+  id: number;
+  user_id: number;
   subject: string;
   description: string;
-  date: string;
   status: string;
-  createdAt?: string;
-  updatedAt?: string;
-  priority?: string;
+  priority: string;
+  created_at: string;
+  updated_at: string;
 };
 
-const mockTickets: SupportTicket[] = Array(5).fill({
-  subject: "issue with commisions transfere",
-  description: "I have issue transfering to token wallet",
-  date: "23/11/2025",
-  status: "Open",
-  createdAt: "January 14, 2026",
-  updatedAt: "February 19, 2026",
-  priority: "Medium",
+const ticketSchema = z.object({
+  subject: z.string().min(3, "Subject must be at least 3 characters"),
+  description: z.string().min(10, "Description must be at least 10 characters"),
 });
+
+type TicketFormValues = z.infer<typeof ticketSchema>;
 
 function SupportActions({ onOpenAddModal }: { onOpenAddModal: () => void }) {
   return (
@@ -41,10 +45,33 @@ function SupportActions({ onOpenAddModal }: { onOpenAddModal: () => void }) {
 }
 
 function TicketList({
+  tickets,
+  isLoading,
   onViewTicket,
 }: {
+  tickets: SupportTicket[];
+  isLoading: boolean;
   onViewTicket: (ticket: SupportTicket) => void;
 }) {
+  if (isLoading) {
+    return (
+      <div className="w-full flex flex-col items-center justify-center py-20 gap-4">
+        <Loader2 className="w-10 h-10 animate-spin text-[#295175]" />
+        <p className="text-slate-500 font-medium">Loading tickets...</p>
+      </div>
+    );
+  }
+
+  if (tickets.length === 0) {
+    return (
+      <div className="w-full flex flex-col items-center justify-center py-20 opacity-60">
+        <Ticket className="w-16 h-16 text-slate-300 mb-4" />
+        <p className="text-slate-500 font-semibold text-lg">
+          No support tickets found
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="w-full flex flex-col min-w-[800px] overflow-x-auto">
       {/* Header Row */}
@@ -65,23 +92,32 @@ function TicketList({
 
       {/* Ticket Cards */}
       <div className="flex flex-col gap-4 mt-2">
-        {mockTickets.map((ticket, idx) => (
+        {tickets.map((ticket) => (
           <div
-            key={idx}
+            key={ticket.id}
             className="grid grid-cols-12 gap-4 px-8 py-5 bg-[#f8f9fa] hover:bg-[#f1f3f5] transition-colors rounded-2xl items-center"
           >
             <div className="col-span-3 text-slate-800 font-semibold text-[14px]">
               {ticket.subject}
             </div>
-            <div className="col-span-5 text-slate-600 font-medium text-[14px]">
+            <div
+              className="col-span-5 text-slate-600 font-medium text-[14px] truncate"
+              title={ticket.description}
+            >
               {ticket.description}
             </div>
             <div className="col-span-2 text-slate-700 font-semibold text-[14px] text-center">
-              {ticket.date}
+              {new Date(ticket.created_at).toLocaleDateString()}
             </div>
             <div className="col-span-2 flex items-center justify-center gap-6">
               {/* Status Badge */}
-              <div className="border border-emerald-400 text-emerald-500 bg-emerald-50/50 px-6 py-1.5 rounded-md font-medium text-xs tracking-wide">
+              <div
+                className={`border ${
+                  ticket.status.toLowerCase() === "open"
+                    ? "border-emerald-400 text-emerald-500 bg-emerald-50/50"
+                    : "border-slate-300 text-slate-500 bg-slate-50"
+                } px-6 py-1.5 rounded-md font-medium text-xs tracking-wide capitalize`}
+              >
                 {ticket.status}
               </div>
               {/* Action Icon */}
@@ -152,7 +188,7 @@ function TicketDetailsModal({
                 Created At
               </span>
               <span className="text-slate-700 font-bold text-[15px]">
-                {ticket.createdAt || ticket.date}
+                {new Date(ticket.created_at).toLocaleString()}
               </span>
             </div>
             <div className="flex flex-col gap-1.5">
@@ -160,13 +196,19 @@ function TicketDetailsModal({
                 Updated At
               </span>
               <span className="text-slate-700 font-bold text-[15px]">
-                {ticket.updatedAt || ticket.date}
+                {new Date(ticket.updated_at).toLocaleString()}
               </span>
             </div>
 
             <div className="flex flex-col gap-1.5 items-start">
               <span className="text-slate-500 text-sm font-medium">Status</span>
-              <div className="border border-emerald-400 text-emerald-500 bg-emerald-50/50 px-5 py-1 rounded-full font-semibold text-xs tracking-wide">
+              <div
+                className={`border ${
+                  ticket.status.toLowerCase() === "open"
+                    ? "border-emerald-400 text-emerald-500 bg-emerald-50/50"
+                    : "border-slate-300 text-slate-500 bg-slate-50"
+                } px-5 py-1 rounded-full font-semibold text-xs tracking-wide capitalize`}
+              >
                 {ticket.status}
               </div>
             </div>
@@ -213,7 +255,23 @@ function SupportPagination() {
   );
 }
 
-function AddTicketModal({ onClose }: { onClose: () => void }) {
+function AddTicketModal({
+  onClose,
+  onSubmit,
+  isPending,
+}: {
+  onClose: () => void;
+  onSubmit: (data: TicketFormValues) => void;
+  isPending: boolean;
+}) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TicketFormValues>({
+    resolver: zodResolver(ticketSchema),
+  });
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
       {/* Backdrop */}
@@ -236,16 +294,25 @@ function AddTicketModal({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Form Body */}
-        <div className="px-8 pt-8 flex flex-col gap-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="px-8 pt-8 flex flex-col gap-6"
+        >
           <div className="flex flex-col gap-2">
             <label className="text-slate-700 font-medium text-sm">
               Ticket Title*
             </label>
             <input
               type="text"
+              {...register("subject")}
               placeholder="Ticket Title"
               className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-[#295175] focus:ring-1 focus:ring-[#295175]"
             />
+            {errors.subject && (
+              <span className="text-red-500 text-xs">
+                {errors.subject.message}
+              </span>
+            )}
           </div>
 
           <div className="flex flex-col gap-2">
@@ -254,28 +321,71 @@ function AddTicketModal({ onClose }: { onClose: () => void }) {
             </label>
             <textarea
               rows={5}
+              {...register("description")}
               placeholder="Ticket Description"
               className="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-[#295175] focus:ring-1 focus:ring-[#295175] resize-none"
             ></textarea>
+            {errors.description && (
+              <span className="text-red-500 text-xs">
+                {errors.description.message}
+              </span>
+            )}
           </div>
-        </div>
 
-        {/* Footer */}
-        <div className="px-8 mt-8">
-          <button className="w-full bg-[#1f3a53] hover:bg-[#15283b] text-white text-sm font-semibold py-3.5 rounded-lg transition-colors shadow-sm">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="w-full bg-[#1f3a53] hover:bg-[#15283b] text-white text-sm font-semibold py-3.5 rounded-lg transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {isPending && <Loader2 className="w-4 h-4 animate-spin" />}
             Submit Ticket
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
 }
 
 function SupportRouteComponent() {
+  const queryClient = useQueryClient();
   const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(
     null,
   );
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  // Fetch Tickets
+  const { data: ticketsResponse, isLoading } = useQuery({
+    queryKey: ["user-tickets"],
+    queryFn: async () => {
+      const response = await api.get("user-tickets");
+      return response.data;
+    },
+  });
+
+  const tickets: SupportTicket[] = ticketsResponse?.data || [];
+
+  // Create Ticket Mutation
+  const { mutate: createTicket, isPending: isMutationPending } = useMutation({
+    mutationFn: async (data: TicketFormValues) => {
+      const response = await api.post("create-ticket", data);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.success("Ticket created successfully!");
+      queryClient.invalidateQueries({ queryKey: ["user-tickets"] });
+      setIsAddModalOpen(false);
+    },
+    onError: (error: unknown) => {
+      let message = "Failed to create ticket";
+      if (typeof error === "object" && error !== null && "response" in error) {
+        const axiosError = error as {
+          response: { data?: { message?: string } };
+        };
+        message = axiosError.response.data?.message || message;
+      }
+      toast.error(message);
+    },
+  });
 
   return (
     <div className="min-h-[calc(100vh-100px)] bg-[#f8fafc] w-full max-w-[1500px] mx-auto">
@@ -285,11 +395,15 @@ function SupportRouteComponent() {
 
         {/* Ticket List */}
         <div className="flex-1 w-full overflow-x-auto">
-          <TicketList onViewTicket={setSelectedTicket} />
+          <TicketList
+            tickets={tickets}
+            isLoading={isLoading}
+            onViewTicket={setSelectedTicket}
+          />
         </div>
 
         {/* Pagination */}
-        <SupportPagination />
+        {/* <SupportPagination /> */}
 
         {/* Modal Portal Element */}
         {selectedTicket && (
@@ -300,7 +414,11 @@ function SupportRouteComponent() {
         )}
 
         {isAddModalOpen && (
-          <AddTicketModal onClose={() => setIsAddModalOpen(false)} />
+          <AddTicketModal
+            onClose={() => setIsAddModalOpen(false)}
+            onSubmit={(data) => createTicket(data)}
+            isPending={isMutationPending}
+          />
         )}
       </div>
     </div>

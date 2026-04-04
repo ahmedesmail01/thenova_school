@@ -5,7 +5,6 @@ import {
   Instagram,
   Linkedin,
   MessageCircle,
-  Share2,
   Loader2,
   AlertCircle,
 } from "lucide-react";
@@ -33,7 +32,7 @@ function SocialIconButton({ icon: Icon, color, bgColor }: SocialLinkProps) {
   );
 }
 
-function ProfileAvatar({ src, username }: { src?: string; username: string }) {
+function ProfileAvatar({ src }: { src?: string; username: string }) {
   const [prevSrc, setPrevSrc] = useState(src);
   const [error, setError] = useState(false);
 
@@ -43,11 +42,12 @@ function ProfileAvatar({ src, username }: { src?: string; username: string }) {
     setError(false);
   }
 
-  const fallbackSrc = `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
+  // const fallbackSrc = `https://api.dicebear.com/7.x/avataaars/svg?seed=${username}`;
+  const fallbackSrc = `/images/game-avatar.png`;
   const isValidSrc = src && src !== "null" && src !== "";
 
   return (
-    <div className="w-32 h-32 rounded-full p-1 bg-white shadow-lg overflow-hidden relative z-10 border border-slate-50">
+    <div className="w-[153px] h-[153px] rounded-full p-1 bg-white shadow-lg overflow-hidden relative z-10 border border-slate-50">
       <img
         src={error || !isValidSrc ? fallbackSrc : src}
         alt="Profile"
@@ -133,22 +133,22 @@ export function UserProfileCard({
   return (
     <div
       className={cn(
-        "bg-white rounded-[20px] p-8 shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-slate-100 flex flex-col items-center text-center h-full relative overflow-hidden",
+        "bg-white rounded-[20px] p-5 shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-slate-100 flex flex-col items-center text-center h-full relative overflow-hidden",
         className,
       )}
     >
       {/* Top Header Actions */}
-      <div className="w-full flex justify-between items-center mb-4 relative z-10">
-        <span className="bg-[#e6f9f1] text-[#2db39b] text-[13px] font-bold px-5 py-1.5 rounded-full">
+      <div className="w-full flex justify-between items-center mb-3 relative z-10">
+        <span className="bg-[#e6f9f1] text-[#2db39b] text-[12px] font-bold px-4 py-1 rounded-full">
           {user.subscription}
         </span>
-        {/* <button className="w-9 h-9 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-brand-blue-btn hover:bg-blue-50 transition-colors">
-          <Share2 size={18} />
+        {/* <button className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:text-brand-blue-btn hover:bg-blue-50 transition-colors">
+          <Share2 size={16} />
         </button> */}
       </div>
 
       {/* Avatar Section with Decoration */}
-      <div className="relative mb-6">
+      <div className="relative mb-8 ">
         {/* Decorative Orbit/Stars */}
         <div className="absolute inset-[-20px] pointer-events-none opacity-20">
           <svg
@@ -175,36 +175,36 @@ export function UserProfileCard({
       </div>
 
       {/* User Info */}
-      <div className="space-y-1 mb-6 relative z-10">
-        <h3 className="text-[20px] font-bold text-[#1a2d42]">
+      <div className="space-y-0.5 mb-8 relative z-10">
+        <h3 className="text-[18px] font-bold text-[#1a2d42]">
           {user.firstName} {user.lastName}
         </h3>
-        <p className="text-sm text-slate-400 font-medium">{user.username}</p>
+        <p className="text-xs text-slate-400 font-medium">{user.username}</p>
       </div>
 
       {/* Status Badge */}
-      <div className="mb-10 relative z-10">
-        <span className="bg-[#2db39b] text-white text-[14px] font-bold px-8 py-2 rounded-full shadow-lg shadow-[#2db39b]/20">
+      <div className="mb-6 relative z-10">
+        <span className="bg-[#2db39b] text-white text-[13px] font-bold px-6 py-1.5 rounded-full shadow-lg shadow-[#2db39b]/20">
           {dashboardData?.rank?.name || user.status}
         </span>
       </div>
 
       {/* Domain Section */}
-      <div className="w-full space-y-4 mb-10 relative z-10">
-        <button className="text-[14px] text-slate-400 font-medium hover:text-brand-blue-btn transition-colors">
+      <div className="w-full  space-y-8 mb-6 relative z-10">
+        <button className="text-[13px] text-slate-400 font-medium hover:text-brand-blue-btn transition-colors">
           View personalized domain
         </button>
 
         <button
           onClick={handleCopyDomain}
-          className="w-full bg-[#eff1f9] hover:bg-[#e4e8f5] text-brand-blue-btn py-3.5 rounded-xl text-[15px] font-bold transition-all active:scale-[0.98]"
+          className="w-full bg-[#eff1f9] hover:bg-[#e4e8f5] text-brand-blue-btn py-3 rounded-xl text-[14px] font-bold transition-all active:scale-[0.98]"
         >
           Copy personalized domain
         </button>
       </div>
 
       {/* Social Links */}
-      <div className="flex justify-center gap-3 relative z-10">
+      <div className="flex justify-center  gap-3 relative z-10">
         <SocialIconButton
           icon={Facebook}
           color="text-[#1877F2]"

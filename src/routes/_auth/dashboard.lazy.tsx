@@ -37,7 +37,7 @@ function RouteComponent() {
   return (
     <div className="space-y-8 animate-in fade-in duration-700 pb-12">
       {/* SECTION 1: Top Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-h-[785px] overflow-y-auto lg:overflow-hidden">
         {/* Team Sales Component */}
         <TeamSalesCard data={data?.data} className="lg:col-span-1" />
 

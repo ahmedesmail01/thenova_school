@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
+import toast from "react-hot-toast";
 import { Button } from "../../../../components/ui/Button";
 import api from "../../../../lib/api";
 import { type User } from "../../useAuthStore";
@@ -14,6 +16,7 @@ export function StepReview({
   onBack: () => void;
   onSuccess: (user: User, token: string) => void;
 }) {
+  const navigate = useNavigate();
   const [agreed, setAgreed] = useState(false);
   const {
     mutate: registerMutation,
@@ -50,8 +53,21 @@ export function StepReview({
       });
     },
     onSuccess: (response) => {
+      const { user, token, status, message } = response.data;
+
+      // If registration succeeded but no automatic login data (user/token) was returned
+      if (status && (!user || !token)) {
+        toast.success(message || "Registration successful! Please login.");
+        navigate({ to: "/login" });
+        return;
+      }
+
+      // If data is missing but status wasn't explicitly success, let it throw to trigger isError
+      if (!user || !token) {
+        throw new Error("Invalid response structure from server");
+      }
+
       // Mapping the response to ensure it matches the User interface
-      const { user, token } = response.data;
       const completeUser: User = {
         id: user.id || Math.random().toString(36).substr(2, 9),
         first_name: user.first_name || data.firstName || "",
@@ -64,13 +80,11 @@ export function StepReview({
       };
       onSuccess(completeUser, token);
     },
-    onError: (error: unknown) => {
-      const maybeAxiosError = error as {
-        response?: { data?: { message?: string | { image?: string[] } } };
-      };
-      const message = maybeAxiosError.response?.data?.message;
-      const msg = typeof message === "string" ? message : message?.image?.[0];
-      console.error(msg || "Registration failed.");
+    onError: (error: any) => {
+      const message = error.response?.data?.message;
+      const msg =
+        typeof message === "string" ? message : message?.image?.[0] || message?.email?.[0] || message?.username?.[0];
+      toast.error(msg || "Registration failed. Please check your inputs.");
     },
   });
 

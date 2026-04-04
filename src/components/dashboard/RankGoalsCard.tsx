@@ -6,6 +6,7 @@ interface RankGoalItemProps {
   percentage: string;
   achieved: string;
   progress: number; // 0 to 100
+  requiredRankName?: string;
 }
 
 interface Props {
@@ -18,12 +19,13 @@ function GoalItem({
   percentage,
   achieved,
   progress,
+  requiredRankName,
 }: RankGoalItemProps) {
   return (
-    <div className="space-y-3 py-4 border-b border-slate-50 last:border-0 relative z-10">
+    <div className="space-y-2 py-2.5 border-b border-slate-50 last:border-0 relative z-10">
       <div className="flex justify-between items-center">
-        <span className="text-[18px]  text-slate-400">{label}</span>
-        <div className="px-3 py-1 rounded-lg border border-blue-400 text-brand-blue-btn text-[12px] font-bold">
+        <span className="text-[16px] text-slate-400">{label}</span>
+        <div className="px-2.5 py-0.5 rounded-lg border border-blue-400 text-brand-blue-btn text-[11px] font-bold">
           {percentage}
         </div>
       </div>
@@ -35,9 +37,14 @@ function GoalItem({
         />
       </div>
 
-      <p className="text-[16px]">
+      <p className="text-[14px]">
         <span className="font-bold text-brand-blue-btn">{achieved}</span>
-        <span className="text-slate-300 ml-1 ">Achieved</span>
+        <span className="text-slate-300 mx-2 ">Achieved</span>
+        {requiredRankName && (
+          <span className="text-slate-400 mx-2 font-semibold">
+            Rank:{requiredRankName}
+          </span>
+        )}
       </p>
     </div>
   );
@@ -75,7 +82,7 @@ export function RankGoalsCard({ className, data }: Props) {
   return (
     <div
       className={cn(
-        "bg-white rounded-[20px] p-8 shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-slate-100 relative overflow-hidden flex flex-col h-full",
+        "bg-white rounded-[20px] p-6 shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-slate-100 relative overflow-hidden flex flex-col h-full",
         className,
       )}
       style={{
@@ -85,11 +92,11 @@ export function RankGoalsCard({ className, data }: Props) {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <h3 className="text-[20px] font-bold text-gray-700 mb-6  relative z-10">
+      <h3 className="text-[18px] font-bold text-gray-700 mb-4 relative z-10">
         Next Rank Goals
       </h3>
 
-      <div className="space-y-2 flex-1 flex flex-col justify-between">
+      <div className="space-y-1.5 flex-1 flex flex-col justify-between">
         <GoalItem
           label="Team Volume in LEFT"
           percentage={getPercentageString(
@@ -121,35 +128,72 @@ export function RankGoalsCard({ className, data }: Props) {
           )}
         />
         <GoalItem
-          label="Direct Recruits in LEFT"
+          label="Direct Recruits"
           percentage={getPercentageString(
-            Number(nextRank?.user_left_referrals) || 0,
-            Number(nextRank?.left_referrals) || 0,
+            Number(nextRank?.user_direct_referrals) || 0,
+            Number(nextRank?.direct_referrals) || 0,
           )}
           achieved={getAchievedString(
-            Number(nextRank?.user_left_referrals) || 0,
-            Number(nextRank?.left_referrals) || 0,
+            Number(nextRank?.user_direct_referrals) || 0,
+            Number(nextRank?.direct_referrals) || 0,
           )}
           progress={calculateProgress(
-            Number(nextRank?.user_left_referrals) || 0,
-            Number(nextRank?.left_referrals) || 0,
+            Number(nextRank?.user_direct_referrals) || 0,
+            Number(nextRank?.direct_referrals) || 0,
           )}
         />
-        <GoalItem
-          label="Direct Recruits in RIGHT"
-          percentage={getPercentageString(
-            Number(nextRank?.user_right_referrals) || 0,
-            Number(nextRank?.right_referrals) || 0,
-          )}
-          achieved={getAchievedString(
-            Number(nextRank?.user_right_referrals) || 0,
-            Number(nextRank?.right_referrals) || 0,
-          )}
-          progress={calculateProgress(
-            Number(nextRank?.user_right_referrals) || 0,
-            Number(nextRank?.right_referrals) || 0,
-          )}
-        />
+        {nextRank?.user_downline_progress && (
+          <>
+            <GoalItem
+              label="Direct Recruits Rank in RIGHT"
+              requiredRankName={
+                nextRank?.user_downline_progress.right.required_rank.name
+              }
+              percentage={getPercentageString(
+                Number(nextRank?.user_downline_progress.right.current_count) ||
+                  0,
+                Number(nextRank?.user_downline_progress.right.required_count) ||
+                  0,
+              )}
+              achieved={getAchievedString(
+                Number(nextRank?.user_downline_progress.right.current_count) ||
+                  0,
+                Number(nextRank?.user_downline_progress.right.required_count) ||
+                  0,
+              )}
+              progress={calculateProgress(
+                Number(nextRank?.user_downline_progress.right.current_count) ||
+                  0,
+                Number(nextRank?.user_downline_progress.right.required_count) ||
+                  0,
+              )}
+            />
+            <GoalItem
+              label="Direct Recruits Rank in LEFT"
+              requiredRankName={
+                nextRank?.user_downline_progress.left.required_rank.name
+              }
+              percentage={getPercentageString(
+                Number(nextRank?.user_downline_progress.left.current_count) ||
+                  0,
+                Number(nextRank?.user_downline_progress.left.required_count) ||
+                  0,
+              )}
+              achieved={getAchievedString(
+                Number(nextRank?.user_downline_progress.left.current_count) ||
+                  0,
+                Number(nextRank?.user_downline_progress.left.required_count) ||
+                  0,
+              )}
+              progress={calculateProgress(
+                Number(nextRank?.user_downline_progress.left.current_count) ||
+                  0,
+                Number(nextRank?.user_downline_progress.left.required_count) ||
+                  0,
+              )}
+            />
+          </>
+        )}
       </div>
     </div>
   );

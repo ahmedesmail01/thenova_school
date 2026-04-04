@@ -13,8 +13,16 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/_auth'
 
+const TermsAndConditionsLazyRouteImport = createFileRoute(
+  '/terms-and-conditions',
+)()
 const RegisterLazyRouteImport = createFileRoute('/register')()
+const PrivacyPolicyLazyRouteImport = createFileRoute('/privacy-policy')()
+const PackagesLazyRouteImport = createFileRoute('/packages')()
 const LoginLazyRouteImport = createFileRoute('/login')()
+const ForgotPasswordLazyRouteImport = createFileRoute('/forgot-password')()
+const DisclaimerLazyRouteImport = createFileRoute('/disclaimer')()
+const CookiePolicyLazyRouteImport = createFileRoute('/cookie-policy')()
 const AboutLazyRouteImport = createFileRoute('/about')()
 const IndexLazyRouteImport = createFileRoute('/')()
 const CoursesIndexLazyRouteImport = createFileRoute('/courses/')()
@@ -32,16 +40,52 @@ const AuthGenealogyLazyRouteImport = createFileRoute('/_auth/genealogy')()
 const AuthDashboardLazyRouteImport = createFileRoute('/_auth/dashboard')()
 const AuthCommissionsLazyRouteImport = createFileRoute('/_auth/commissions')()
 
+const TermsAndConditionsLazyRoute = TermsAndConditionsLazyRouteImport.update({
+  id: '/terms-and-conditions',
+  path: '/terms-and-conditions',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() =>
+  import('./routes/terms-and-conditions.lazy').then((d) => d.Route),
+)
 const RegisterLazyRoute = RegisterLazyRouteImport.update({
   id: '/register',
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/register.lazy').then((d) => d.Route))
+const PrivacyPolicyLazyRoute = PrivacyPolicyLazyRouteImport.update({
+  id: '/privacy-policy',
+  path: '/privacy-policy',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() =>
+  import('./routes/privacy-policy.lazy').then((d) => d.Route),
+)
+const PackagesLazyRoute = PackagesLazyRouteImport.update({
+  id: '/packages',
+  path: '/packages',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/packages.lazy').then((d) => d.Route))
 const LoginLazyRoute = LoginLazyRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
+const ForgotPasswordLazyRoute = ForgotPasswordLazyRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() =>
+  import('./routes/forgot-password.lazy').then((d) => d.Route),
+)
+const DisclaimerLazyRoute = DisclaimerLazyRouteImport.update({
+  id: '/disclaimer',
+  path: '/disclaimer',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/disclaimer.lazy').then((d) => d.Route))
+const CookiePolicyLazyRoute = CookiePolicyLazyRouteImport.update({
+  id: '/cookie-policy',
+  path: '/cookie-policy',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/cookie-policy.lazy').then((d) => d.Route))
 const AboutLazyRoute = AboutLazyRouteImport.update({
   id: '/about',
   path: '/about',
@@ -146,8 +190,14 @@ const AuthCommissionsLazyRoute = AuthCommissionsLazyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
+  '/cookie-policy': typeof CookiePolicyLazyRoute
+  '/disclaimer': typeof DisclaimerLazyRoute
+  '/forgot-password': typeof ForgotPasswordLazyRoute
   '/login': typeof LoginLazyRoute
+  '/packages': typeof PackagesLazyRoute
+  '/privacy-policy': typeof PrivacyPolicyLazyRoute
   '/register': typeof RegisterLazyRoute
+  '/terms-and-conditions': typeof TermsAndConditionsLazyRoute
   '/commissions': typeof AuthCommissionsLazyRoute
   '/dashboard': typeof AuthDashboardLazyRoute
   '/genealogy': typeof AuthGenealogyLazyRoute
@@ -166,8 +216,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/about': typeof AboutLazyRoute
+  '/cookie-policy': typeof CookiePolicyLazyRoute
+  '/disclaimer': typeof DisclaimerLazyRoute
+  '/forgot-password': typeof ForgotPasswordLazyRoute
   '/login': typeof LoginLazyRoute
+  '/packages': typeof PackagesLazyRoute
+  '/privacy-policy': typeof PrivacyPolicyLazyRoute
   '/register': typeof RegisterLazyRoute
+  '/terms-and-conditions': typeof TermsAndConditionsLazyRoute
   '/commissions': typeof AuthCommissionsLazyRoute
   '/dashboard': typeof AuthDashboardLazyRoute
   '/genealogy': typeof AuthGenealogyLazyRoute
@@ -188,8 +244,14 @@ export interface FileRoutesById {
   '/': typeof IndexLazyRoute
   '/_auth': typeof AuthRouteWithChildren
   '/about': typeof AboutLazyRoute
+  '/cookie-policy': typeof CookiePolicyLazyRoute
+  '/disclaimer': typeof DisclaimerLazyRoute
+  '/forgot-password': typeof ForgotPasswordLazyRoute
   '/login': typeof LoginLazyRoute
+  '/packages': typeof PackagesLazyRoute
+  '/privacy-policy': typeof PrivacyPolicyLazyRoute
   '/register': typeof RegisterLazyRoute
+  '/terms-and-conditions': typeof TermsAndConditionsLazyRoute
   '/_auth/commissions': typeof AuthCommissionsLazyRoute
   '/_auth/dashboard': typeof AuthDashboardLazyRoute
   '/_auth/genealogy': typeof AuthGenealogyLazyRoute
@@ -210,8 +272,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/cookie-policy'
+    | '/disclaimer'
+    | '/forgot-password'
     | '/login'
+    | '/packages'
+    | '/privacy-policy'
     | '/register'
+    | '/terms-and-conditions'
     | '/commissions'
     | '/dashboard'
     | '/genealogy'
@@ -230,8 +298,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/cookie-policy'
+    | '/disclaimer'
+    | '/forgot-password'
     | '/login'
+    | '/packages'
+    | '/privacy-policy'
     | '/register'
+    | '/terms-and-conditions'
     | '/commissions'
     | '/dashboard'
     | '/genealogy'
@@ -251,8 +325,14 @@ export interface FileRouteTypes {
     | '/'
     | '/_auth'
     | '/about'
+    | '/cookie-policy'
+    | '/disclaimer'
+    | '/forgot-password'
     | '/login'
+    | '/packages'
+    | '/privacy-policy'
     | '/register'
+    | '/terms-and-conditions'
     | '/_auth/commissions'
     | '/_auth/dashboard'
     | '/_auth/genealogy'
@@ -273,14 +353,27 @@ export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AuthRoute: typeof AuthRouteWithChildren
   AboutLazyRoute: typeof AboutLazyRoute
+  CookiePolicyLazyRoute: typeof CookiePolicyLazyRoute
+  DisclaimerLazyRoute: typeof DisclaimerLazyRoute
+  ForgotPasswordLazyRoute: typeof ForgotPasswordLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
+  PackagesLazyRoute: typeof PackagesLazyRoute
+  PrivacyPolicyLazyRoute: typeof PrivacyPolicyLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
+  TermsAndConditionsLazyRoute: typeof TermsAndConditionsLazyRoute
   CoursesCourseIdLazyRoute: typeof CoursesCourseIdLazyRoute
   CoursesIndexLazyRoute: typeof CoursesIndexLazyRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms-and-conditions': {
+      id: '/terms-and-conditions'
+      path: '/terms-and-conditions'
+      fullPath: '/terms-and-conditions'
+      preLoaderRoute: typeof TermsAndConditionsLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/register': {
       id: '/register'
       path: '/register'
@@ -288,11 +381,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/packages': {
+      id: '/packages'
+      path: '/packages'
+      fullPath: '/packages'
+      preLoaderRoute: typeof PackagesLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/disclaimer': {
+      id: '/disclaimer'
+      path: '/disclaimer'
+      fullPath: '/disclaimer'
+      preLoaderRoute: typeof DisclaimerLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cookie-policy': {
+      id: '/cookie-policy'
+      path: '/cookie-policy'
+      fullPath: '/cookie-policy'
+      preLoaderRoute: typeof CookiePolicyLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -453,8 +581,14 @@ const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AuthRoute: AuthRouteWithChildren,
   AboutLazyRoute: AboutLazyRoute,
+  CookiePolicyLazyRoute: CookiePolicyLazyRoute,
+  DisclaimerLazyRoute: DisclaimerLazyRoute,
+  ForgotPasswordLazyRoute: ForgotPasswordLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
+  PackagesLazyRoute: PackagesLazyRoute,
+  PrivacyPolicyLazyRoute: PrivacyPolicyLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
+  TermsAndConditionsLazyRoute: TermsAndConditionsLazyRoute,
   CoursesCourseIdLazyRoute: CoursesCourseIdLazyRoute,
   CoursesIndexLazyRoute: CoursesIndexLazyRoute,
 }

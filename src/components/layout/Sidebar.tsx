@@ -8,7 +8,7 @@ import {
   CircleDollarSign,
   Trophy,
   Users,
-  Zap,
+  // Zap,
   UserCircle,
   LifeBuoy,
   GraduationCap,
@@ -54,7 +54,12 @@ export function Sidebar({
     // { icon: Zap, label: "NOVA PRO+", to: "/nova-pro" },
     { icon: UserCircle, label: "Profile", to: "/profile" },
     { icon: LifeBuoy, label: "Support", to: "/support" },
-    { icon: GraduationCap, label: "NOVA School", to: "/school" },
+    {
+      icon: GraduationCap,
+      label: "NOVA School",
+      to: "https://school.thenovagroupco.com/courses",
+      isExternal: true,
+    },
   ];
 
   return (
@@ -104,28 +109,52 @@ export function Sidebar({
 
       {/* Nav Items */}
       <nav className="flex-1 py-6 px-4 space-y-2 overflow-y-auto no-scrollbar">
-        {menuItems.map((item) => (
-          <Link
-            key={item.label}
-            to={item.to}
-            onClick={() => setIsMobileOpen(false)}
-            className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group",
-              "text-dash-muted hover:text-dash-accent hover:bg-dash-bg",
-              "[&.active]:bg-dash-accent [&.active]:text-white [&.active]:shadow-lg [&.active]:shadow-dash-accent/20",
-            )}
-          >
-            <item.icon size={20} className="shrink-0" />
-            <span
-              className={cn(
-                "font-medium text-sm whitespace-nowrap",
-                isCollapsed && "lg:hidden",
-              )}
+        {menuItems.map((item) => {
+          const content = (
+            <>
+              <item.icon size={20} className="shrink-0" />
+              <span
+                className={cn(
+                  "font-medium text-sm whitespace-nowrap",
+                  isCollapsed && "lg:hidden",
+                )}
+              >
+                {item.label}
+              </span>
+            </>
+          );
+
+          const className = cn(
+            "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group",
+            "text-dash-muted hover:text-dash-accent hover:bg-dash-bg",
+            "[&.active]:bg-dash-accent [&.active]:text-white [&.active]:shadow-lg [&.active]:shadow-dash-accent/20",
+          );
+
+          if (item.isExternal) {
+            return (
+              <a
+                key={item.label}
+                href={item.to}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={className}
+              >
+                {content}
+              </a>
+            );
+          }
+
+          return (
+            <Link
+              key={item.label}
+              to={item.to}
+              onClick={() => setIsMobileOpen(false)}
+              className={className}
             >
-              {item.label}
-            </span>
-          </Link>
-        ))}
+              {content}
+            </Link>
+          );
+        })}
       </nav>
 
       {/* Footer / Logout */}

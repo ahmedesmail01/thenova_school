@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
-import { type StrictUserData } from "../../features/auth/useUserData";
+import { type StrictUserData, type LeanUserData } from "../../features/auth/useUserData";
 
 interface UserModalProps {
   isOpen: boolean;
@@ -8,10 +8,11 @@ interface UserModalProps {
   idCode: number | string;
   fullName: string;
   userImage?: string | null;
-  rankName?: string | null;
   subscriptionName?: string | null;
-  color: "red" | "blue" | "teal";
-  userData?: StrictUserData;
+  userData?: StrictUserData | LeanUserData;
+  rank?: string;
+  userPackage?: string;
+  rankIcon?: string | null;
 }
 
 export function UserModal({
@@ -20,10 +21,11 @@ export function UserModal({
   idCode,
   fullName,
   userImage,
-  rankName,
   subscriptionName,
-  color,
   userData,
+  rank,
+  userPackage,
+  rankIcon,
 }: UserModalProps) {
   if (!isOpen || typeof document === "undefined") return null;
 
@@ -33,7 +35,7 @@ export function UserModal({
     : fullName;
   const username = userData?.username;
   const displayIdCode = userData?.id_code || idCode;
-  const status = userData?.status;
+  const status = userData && "status" in userData ? userData.status : undefined;
 
   // Image handling — match UserInfoModal pattern
   const isValidSrc =
@@ -42,15 +44,18 @@ export function UserModal({
     (userData?.image || userImage) !== "http://localhost/uploads/";
   const imgSrc = isValidSrc
     ? (userData?.image || userImage)!
-    : `https://api.dicebear.com/7.x/avataaars/svg?seed=${username || displayName}`;
+    : `/images/game-avatar.png`;
 
   // Business stats
   const cv = userData?.member?.current_cv ?? 0;
   const leftVol = userData?.member?.totla_left_volume ?? 0;
   const rightVol = userData?.member?.totla_right_volume ?? 0;
 
-  // Sponsor info
-  const sponsorUser = userData?.member?.sponsor?.user;
+  // Sponsor info - only available in StrictUserData
+  const sponsorUser =
+    userData && "member" in userData && "sponsor" in (userData.member as any)
+      ? (userData.member as any).sponsor?.user
+      : undefined;
 
   return createPortal(
     <div
@@ -85,7 +90,7 @@ export function UserModal({
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src =
-                    `https://api.dicebear.com/7.x/avataaars/svg?seed=${username || displayName}`;
+                    `/images/game-avatar.png`;
                 }}
               />
             </div>
@@ -119,10 +124,17 @@ export function UserModal({
                   </span>
                 </div>
               )}
-              {rankName && (
-                <div className="inline-flex items-center justify-center px-4 py-1.5 rounded-full bg-amber-50 border border-amber-200/50">
+              {rank && (
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 border border-amber-200/50 shadow-sm">
+                  {rankIcon && (
+                    <img
+                      src={rankIcon}
+                      alt={rank}
+                      className="w-5 h-5 object-contain"
+                    />
+                  )}
                   <span className="text-xs font-bold text-amber-700 capitalize">
-                    {rankName}
+                    {rank}
                   </span>
                 </div>
               )}
@@ -160,17 +172,17 @@ export function UserModal({
           )}
 
           {/* Subscription Row */}
-          {subscriptionName && (
+          {(subscriptionName || userPackage) && (
             <div className="w-full mt-3">
               <div className="bg-slate-50 rounded-2xl p-4 flex flex-col items-center justify-center text-center hover:bg-slate-100 transition-colors">
                 <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">
                   Subscription
                 </span>
                 <span
-                  className="text-sm font-extrabold truncate w-full text-[#020617]"
-                  title={subscriptionName}
+                  className="text-sm font-extrabold truncate w-full text-[#020617] uppercase tracking-wide"
+                  title={userPackage || subscriptionName || ""}
                 >
-                  {subscriptionName}
+                  {userPackage || subscriptionName}
                 </span>
               </div>
             </div>
@@ -181,7 +193,7 @@ export function UserModal({
             <div className="w-full mt-6 bg-slate-50 rounded-2xl p-4 flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-white shadow-sm overflow-hidden flex items-center justify-center p-0.5 border border-slate-100 shrink-0">
                 <img
-                  src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${sponsorUser.username}`}
+                  src={`${sponsorUser.image ? sponsorUser.image : `/images/game-avatar.png`}`}
                   className="w-full h-full object-cover rounded-full"
                   alt="Sponsor"
                 />

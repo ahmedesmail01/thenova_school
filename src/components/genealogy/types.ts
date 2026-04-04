@@ -9,6 +9,9 @@ export interface NodeProps {
   subscriptionName?: string | null;
   color: "red" | "blue" | "teal";
   isRoot?: boolean;
+  rank?: string;
+  userPackage?: string;
+  rankIcon?: string | null;
 }
 
 export interface ColorScheme {
