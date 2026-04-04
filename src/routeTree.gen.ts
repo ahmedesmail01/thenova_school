@@ -18,6 +18,7 @@ const TermsAndConditionsLazyRouteImport = createFileRoute(
 )()
 const RegisterLazyRouteImport = createFileRoute('/register')()
 const PrivacyPolicyLazyRouteImport = createFileRoute('/privacy-policy')()
+const PlayerLazyRouteImport = createFileRoute('/player')()
 const PackagesLazyRouteImport = createFileRoute('/packages')()
 const LoginLazyRouteImport = createFileRoute('/login')()
 const ForgotPasswordLazyRouteImport = createFileRoute('/forgot-password')()
@@ -59,6 +60,11 @@ const PrivacyPolicyLazyRoute = PrivacyPolicyLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/privacy-policy.lazy').then((d) => d.Route),
 )
+const PlayerLazyRoute = PlayerLazyRouteImport.update({
+  id: '/player',
+  path: '/player',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/player.lazy').then((d) => d.Route))
 const PackagesLazyRoute = PackagesLazyRouteImport.update({
   id: '/packages',
   path: '/packages',
@@ -195,6 +201,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordLazyRoute
   '/login': typeof LoginLazyRoute
   '/packages': typeof PackagesLazyRoute
+  '/player': typeof PlayerLazyRoute
   '/privacy-policy': typeof PrivacyPolicyLazyRoute
   '/register': typeof RegisterLazyRoute
   '/terms-and-conditions': typeof TermsAndConditionsLazyRoute
@@ -221,6 +228,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordLazyRoute
   '/login': typeof LoginLazyRoute
   '/packages': typeof PackagesLazyRoute
+  '/player': typeof PlayerLazyRoute
   '/privacy-policy': typeof PrivacyPolicyLazyRoute
   '/register': typeof RegisterLazyRoute
   '/terms-and-conditions': typeof TermsAndConditionsLazyRoute
@@ -249,6 +257,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordLazyRoute
   '/login': typeof LoginLazyRoute
   '/packages': typeof PackagesLazyRoute
+  '/player': typeof PlayerLazyRoute
   '/privacy-policy': typeof PrivacyPolicyLazyRoute
   '/register': typeof RegisterLazyRoute
   '/terms-and-conditions': typeof TermsAndConditionsLazyRoute
@@ -277,6 +286,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/packages'
+    | '/player'
     | '/privacy-policy'
     | '/register'
     | '/terms-and-conditions'
@@ -303,6 +313,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/packages'
+    | '/player'
     | '/privacy-policy'
     | '/register'
     | '/terms-and-conditions'
@@ -330,6 +341,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/login'
     | '/packages'
+    | '/player'
     | '/privacy-policy'
     | '/register'
     | '/terms-and-conditions'
@@ -358,6 +370,7 @@ export interface RootRouteChildren {
   ForgotPasswordLazyRoute: typeof ForgotPasswordLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
   PackagesLazyRoute: typeof PackagesLazyRoute
+  PlayerLazyRoute: typeof PlayerLazyRoute
   PrivacyPolicyLazyRoute: typeof PrivacyPolicyLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
   TermsAndConditionsLazyRoute: typeof TermsAndConditionsLazyRoute
@@ -386,6 +399,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy-policy'
       fullPath: '/privacy-policy'
       preLoaderRoute: typeof PrivacyPolicyLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/player': {
+      id: '/player'
+      path: '/player'
+      fullPath: '/player'
+      preLoaderRoute: typeof PlayerLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/packages': {
@@ -586,6 +606,7 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordLazyRoute: ForgotPasswordLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
   PackagesLazyRoute: PackagesLazyRoute,
+  PlayerLazyRoute: PlayerLazyRoute,
   PrivacyPolicyLazyRoute: PrivacyPolicyLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
   TermsAndConditionsLazyRoute: TermsAndConditionsLazyRoute,
