@@ -67,19 +67,22 @@ export function Navbar() {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-          <Link
-            to="/"
-            activeOptions={{ exact: true, includeHash: true }}
+          <a
+            href="https://test.thenovagroupco.com/"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
           >
             Home
-          </Link>
-          {/* <Link
-            to="/packages"
+          </a>
+          <a
+            href="https://test.thenovagroupco.com/packages"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
           >
             Packages
-          </Link> */}
+          </a>
           <Link
             to="/courses"
             className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
@@ -230,21 +233,24 @@ export function Navbar() {
         className={`md:hidden absolute top-16 left-0 right-0 bg-brand-navy/95 border-b border-brand-border  transition-all duration-300 ${menuOpen ? "max-h-120 opacity-100" : "max-h-0 opacity-0"}`}
       >
         <div className="p-4 flex flex-col gap-2">
-          <Link
-            to="/"
-            activeOptions={{ exact: true, includeHash: true }}
+          <a
+            href="https://test.thenovagroupco.com/"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
             className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
           >
             Home
-          </Link>
-          <Link
-            to="/packages"
+          </a>
+          <a
+            href="https://test.thenovagroupco.com/packages"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
             className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
           >
             Packages
-          </Link>
+          </a>
           <Link
             to="/courses"
             onClick={() => setMenuOpen(false)}
