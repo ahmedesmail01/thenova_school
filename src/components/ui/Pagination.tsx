@@ -24,7 +24,7 @@ export function Pagination({
       <button
         disabled={current === 1}
         onClick={() => onChange(current - 1)}
-        className="w-10 h-10 flex items-center justify-center rounded-lg border border-brand-border text-white disabled:opacity-30 hover:bg-white/5 transition-colors"
+        className="w-10 h-10 flex items-center justify-center rounded-lg border border-brand-border text-black disabled:opacity-30 hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-all"
       >
         ←
       </button>
@@ -33,7 +33,7 @@ export function Pagination({
         <>
           <button
             onClick={() => onChange(1)}
-            className="w-10 h-10 text-text-secondary hover:text-white"
+            className="w-10 h-10 text-text-secondary "
           >
             1
           </button>
@@ -45,11 +45,11 @@ export function Pagination({
         <button
           key={p}
           onClick={() => onChange(p)}
-          className={`w-10 h-10 rounded-lg border ${
+          className={`w-10 h-10 rounded-lg border font-bold transition-all ${
             current === p
               ? "bg-brand-blue border-brand-blue text-white"
-              : "border-brand-border text-text-secondary hover:text-white hover:bg-white/5"
-          } transition-all font-bold`}
+              : "border-brand-border text-text-secondary hover:bg-brand-blue hover:text-white hover:border-brand-blue"
+          }`}
         >
           {p}
         </button>
@@ -60,7 +60,7 @@ export function Pagination({
           <span className="text-text-muted">...</span>
           <button
             onClick={() => onChange(total)}
-            className="w-10 h-10 text-text-secondary hover:text-white"
+            className="w-10 h-10 text-text-secondary "
           >
             {total}
           </button>
@@ -70,7 +70,7 @@ export function Pagination({
       <button
         disabled={current === total}
         onClick={() => onChange(current + 1)}
-        className="w-10 h-10 flex items-center justify-center rounded-lg border border-brand-border text-white disabled:opacity-30 hover:bg-white/5 transition-colors"
+        className="w-10 h-10 flex items-center justify-center rounded-lg border border-brand-border text-black disabled:opacity-30 hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-all"
       >
         →
       </button>

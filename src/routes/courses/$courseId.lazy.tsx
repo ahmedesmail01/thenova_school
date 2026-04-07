@@ -1,5 +1,5 @@
 import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useCourse } from "../../features/courses/courseQueries";
+import { useCourse, formatDuration } from "../../features/courses/courseQueries";
 import { useAuthStore } from "../../features/auth/useAuthStore";
 import { Button } from "../../components/ui/Button";
 import OtherCourses from "../../features/courses/OtherCourses";
@@ -51,8 +51,10 @@ function CourseDetailPage() {
                   alt={course.title}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src =
-                      "/images/courses/placeholder.jpg";
+                    const target = e.target as HTMLImageElement;
+                    if (!target.src.includes("course-1.png")) {
+                      target.src = "/images/course-1.png";
+                    }
                   }}
                 />
                 {/* Play Button */}
@@ -73,7 +75,7 @@ function CourseDetailPage() {
                     {course.description}
                   </p>
                   <div className="text-4xl font-bold text-white pt-2">
-                    ${course.price}
+                    $0
                   </div>
                   <div className="pt-4">
                     <Button
@@ -100,9 +102,7 @@ function CourseDetailPage() {
                 Course Duration
               </h2>
               <p className="text-[30px] font-medium text-[#4E5566]">
-                {course.duration.includes(":")
-                  ? course.duration
-                  : `${course.duration}:00:00`}
+                {formatDuration(course.duration)}
               </p>
             </section>
 
@@ -112,7 +112,7 @@ function CourseDetailPage() {
                 What You Will Learn
               </h2>
               <p className="text-[#4E5566] text-lg max-w-[800px] leading-relaxed">
-                {course.learningOutcomes}
+                {course.description}
               </p>
             </section>
 
@@ -123,12 +123,12 @@ function CourseDetailPage() {
                   Course Content
                 </h2>
                 <p className="text-[#999DA3] text-sm mt-2">
-                  {course.moduleCount} Modules | {course.totalHours} Hours total
+                  {course.sections?.length || 0} Sections | {formatDuration(course.duration)} total
                 </p>
               </div>
 
               <div className="flex flex-col ">
-                {course.modules.map((mod) => (
+                {course.sections?.map((mod) => (
                   <details
                     key={mod.id}
                     className="bg-[#F9F9F9] border border-b border-[#E9EAF0] overflow-hidden group cursor-pointer "
@@ -141,17 +141,22 @@ function CourseDetailPage() {
                         <span className="text-gray-500">{mod.title}</span>
                       </div>
                       <span className="text-gray-500 text-sm font-medium">
-                        {mod.chapterCount} Chapters
+                        {mod.lessons?.length || 0} Lessons
                       </span>
                     </summary>
                     <ul className="px-5 pb-4 space-y-1 border-t border-gray-100">
-                      {mod.chapters.map((c) => (
+                      {mod.lessons?.map((lesson) => (
                         <li
-                          key={c.id}
-                          className="text-sm text-gray-600 py-2 border-b border-gray-50 last:border-0 flex items-center gap-2"
+                          key={lesson.id}
+                          className="text-sm text-gray-600 py-2 border-b border-gray-50 last:border-0 flex items-center justify-between gap-2"
                         >
-                          <span className="text-gray-300">▸</span>
-                          {c.title}
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-300">▸</span>
+                            {lesson.title}
+                          </div>
+                          <span className="text-gray-400 text-xs shrink-0">
+                            {formatDuration(lesson.duration)}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -167,49 +172,35 @@ function CourseDetailPage() {
               </h2>
 
               <div className="space-y-6">
-                <div>
-                  <p className="text-[#4E5566] text-sm font-bold mb-3 uppercase tracking-wider">
-                    Packages
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    {course.availableForPackages.map((p) => (
-                      <span
-                        key={p}
-                        className="px-8 py-2.5 rounded-full bg-linear-to-r from-[#458FCE] to-[#1A334B] text-white text-sm font-medium"
-                      >
-                        {p}
-                      </span>
-                    ))}
+                {course.available_in_package && course.available_in_package.length > 0 && (
+                  <div>
+                    <p className="text-[#4E5566] text-sm font-bold mb-3 uppercase tracking-wider">
+                      Packages
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      {course.available_in_package.map((p) => (
+                        <span
+                          key={typeof p === 'string' ? p : p.name || p.id}
+                          className="px-8 py-2.5 rounded-full bg-linear-to-r from-[#458FCE] to-[#1A334B] text-white text-sm font-medium"
+                        >
+                          {typeof p === 'string' ? p : p.name || `Package ${p.id}`}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-
-                <div>
-                  <p className="text-[#4E5566] text-sm font-bold mb-3 uppercase tracking-wider">
-                    Groups
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    {course.availableForGroups.map((g) => (
-                      <span
-                        key={g}
-                        className="px-8 py-2.5 rounded-full bg-linear-to-r from-[#458FCE] to-[#1A334B] text-white text-sm font-medium"
-                      >
-                        {g}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                )}
 
                 <div>
                   <p className="text-[#4E5566] text-sm font-bold mb-3 uppercase tracking-wider">
                     Skills You Will Gain
                   </p>
                   <div className="flex flex-wrap gap-3">
-                    {course.skills.map((s) => (
+                    {course.skills?.map((s) => (
                       <span
-                        key={s}
+                        key={typeof s === 'string' ? s : s.name || s.id}
                         className="px-8 py-2.5 rounded-full bg-linear-to-r from-[#458FCE] to-[#1A334B] text-white text-sm font-medium"
                       >
-                        {s}
+                        {typeof s === 'string' ? s : s.name}
                       </span>
                     ))}
                   </div>
@@ -217,7 +208,7 @@ function CourseDetailPage() {
               </div>
             </section>
 
-            <OtherCourses courses={course.relatedCourses} />
+            {course.related_courses && <OtherCourses courses={course.related_courses} />}
           </div>
         </div>
       </div>

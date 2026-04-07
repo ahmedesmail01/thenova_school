@@ -1,7 +1,22 @@
 import { useState } from "react";
 
-const CoursesHero = () => {
-  const [search, setSearch] = useState("");
+interface CoursesHeroProps {
+  onSearch?: (query: string) => void;
+  initialSearch?: string;
+}
+
+const CoursesHero = ({ onSearch, initialSearch = "" }: CoursesHeroProps) => {
+  const [search, setSearch] = useState(initialSearch);
+
+  const handleSearch = () => {
+    onSearch?.(search);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
 
   return (
     <div className="relative pt-16 h-[357px] bg-hero-gradient flex flex-col items-center justify-center text-center border-b border-brand-border overflow-hidden">
@@ -30,14 +45,18 @@ const CoursesHero = () => {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={handleKeyDown}
               placeholder="Search ..."
               className="w-full bg-transparent border-none focus:ring-0 px-8 text-[#1D2026] placeholder:text-[#999DA3] text-lg outline-none"
             />
-            <button className="h-full shrink-0 transition-opacity hover:opacity-90">
+            <button
+              onClick={handleSearch}
+              className="h-full shrink-0 transition-opacity hover:opacity-90 "
+            >
               <img
                 src="/icons/searchIcon.svg"
                 alt="Search"
-                className="h-full object-cover"
+                className="w-full object-contain"
               />
             </button>
           </div>

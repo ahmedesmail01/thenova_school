@@ -13,7 +13,7 @@ import {
 import { useUserData } from "../../features/auth/useUserData";
 import { cn } from "../../lib/utils";
 import OtherCourses from "../../features/courses/OtherCourses";
-import { useCourse } from "../../features/courses/courseQueries";
+import { useCourses } from "../../features/courses/courseQueries";
 
 export const Route = createLazyFileRoute("/_auth/profile")({
   component: ProfileRouteComponent,
@@ -21,9 +21,9 @@ export const Route = createLazyFileRoute("/_auth/profile")({
 
 function ProfileRouteComponent() {
   const { data, isLoading, error } = useUserData();
-  const { data: course, isLoading: courseLoading } = useCourse("2");
+  const { data: coursesData, isLoading: coursesLoading } = useCourses({}, 1);
 
-  if (isLoading || courseLoading) {
+  if (isLoading || coursesLoading) {
     return (
       <div className="min-h-[calc(100vh-100px)] w-full flex items-center justify-center bg-[#f8fafc]">
         <div className="flex flex-col items-center gap-4">
@@ -169,17 +169,17 @@ function ProfileRouteComponent() {
           <ContentCard title="Recent Courses" icon={PlayCircle} />
           <ContentCard title="Completed Courses" icon={FileText} />
         </div>
-        {course && (
+        {coursesData?.courses && (
           <OtherCourses
-            courses={course.relatedCourses}
-            title="Recomended Training / Courses"
+            courses={coursesData.courses.slice(0, 4)}
+            title="Recommended Training / Courses"
             subTitle=" "
           />
         )}
 
-        {course && (
+        {coursesData?.courses && (
           <OtherCourses
-            courses={course.relatedCourses}
+            courses={coursesData.courses.slice(4, 8)}
             title="Recent Courses"
             subTitle=" "
           />

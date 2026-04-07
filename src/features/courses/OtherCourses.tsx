@@ -1,11 +1,11 @@
 import { CourseCard } from "../../components/ui/CourseCard";
 import { useNavigate } from "@tanstack/react-router";
-import type { Course } from "./courseQueries";
+import type { RawCourse } from "./courseQueries";
 
 type Props = {
   title?: string;
   subTitle?: string;
-  courses: Course[];
+  courses: RawCourse[];
 };
 
 const OtherCourses = ({

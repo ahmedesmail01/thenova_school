@@ -31,20 +31,31 @@ function CoursesPage() {
     <>
       <div className="bg-white min-h-screen mt-16">
         {/* Hero banner */}
-        <CoursesHero />
+        <CoursesHero
+          onSearch={(q) => handleFilterChange({ ...filters, search: q })}
+          initialSearch={filters.search}
+        />
 
         <div className="max-w-7xl bg-white border  mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Results header + mobile filter toggle */}
           <div className="flex items-center  justify-between mb-6">
             <p className="text-text-muted text-sm">
-              <span className="text-gray-600   font-semibold">
-                {/* {data?.total?.toLocaleString() ?? "—"} */}
-                3,145,684
+              <span className="text-[#1D2026] font-semibold">
+                {data?.total?.toLocaleString() ?? "0"}
               </span>{" "}
-              results find for “ui/ux design”{" "}
+              {filters.search ? (
+                <>
+                  results find for{" "}
+                  <span className="text-[#1D2026] font-bold">
+                    “{filters.search}”
+                  </span>
+                </>
+              ) : (
+                "Total courses found"
+              )}
             </p>
             <button
-              className="lg:hidden text-nowrap mx-1 flex items-center gap-2 text-sm text-white border border-brand-border rounded-lg px-3 py-2 bg-brand-surface hover:bg-white/5 transition-colors"
+              className="lg:hidden text-nowrap mx-1 flex items-center gap-2 text-sm text-white border border-brand-border rounded-lg px-3 py-2 bg-brand-surface  transition-colors"
               onClick={() => setMobileFiltersOpen(true)}
             >
               ⚙ Filters &amp; Categories
@@ -104,16 +115,16 @@ function CoursesPage() {
                     <CourseCard
                       key={course.id}
                       course={course}
-                      onViewDetails={(id) =>
+                      onViewDetails={(slug) =>
                         navigate({
                           to: "/courses/$courseId",
-                          params: { courseId: id },
+                          params: { courseId: slug },
                         })
                       }
-                      onPackage={(id) =>
+                      onPackage={(slug) =>
                         navigate({
                           to: "/courses/$courseId",
-                          params: { courseId: id },
+                          params: { courseId: slug },
                         })
                       }
                     />
