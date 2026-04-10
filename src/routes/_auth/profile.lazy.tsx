@@ -13,7 +13,7 @@ import {
 import { useUserData } from "../../features/auth/useUserData";
 import { cn } from "../../lib/utils";
 import OtherCourses from "../../features/courses/OtherCourses";
-import { useCourses } from "../../features/courses/courseQueries";
+import { useCourses, useUserEnrollments } from "../../features/courses/courseQueries";
 
 export const Route = createLazyFileRoute("/_auth/profile")({
   component: ProfileRouteComponent,
@@ -22,8 +22,9 @@ export const Route = createLazyFileRoute("/_auth/profile")({
 function ProfileRouteComponent() {
   const { data, isLoading, error } = useUserData();
   const { data: coursesData, isLoading: coursesLoading } = useCourses({}, 1);
+  const { data: enrollmentsData, isLoading: enrollmentsLoading } = useUserEnrollments();
 
-  if (isLoading || coursesLoading) {
+  if (isLoading || coursesLoading || enrollmentsLoading) {
     return (
       <div className="min-h-[calc(100vh-100px)] w-full flex items-center justify-center bg-[#f8fafc]">
         <div className="flex flex-col items-center gap-4">
@@ -56,12 +57,19 @@ function ProfileRouteComponent() {
   }
 
   const userData = data["user data"];
+  const enrollments = enrollmentsData?.enrollments || [];
 
-  // Mock stats for the dashboard
+  const totalCourses = enrollments.length;
+  const inProgress = enrollments.filter((e) => e.progress_percentage > 0 && e.progress_percentage < 100).length;
+  const completed = enrollments.filter((e) => e.progress_percentage === 100 || e.enrollment.is_completed).length;
+  const notStarted = enrollments.filter((e) => e.progress_percentage === 0 && !e.enrollment.is_completed).length;
+  const averageCompletion = totalCourses > 0 ? Math.round(enrollments.reduce((acc, curr) => acc + (curr.progress_percentage || 0), 0) / totalCourses) : 0;
+
+  // Mock stats for the dashboard combined with real data
   const stats = [
     {
       label: "Total Courses",
-      value: "10",
+      value: totalCourses.toString(),
       icon: PlayCircle,
       color: "text-sky-500",
       bgColor: "bg-white",
@@ -69,7 +77,7 @@ function ProfileRouteComponent() {
     },
     {
       label: "Subscribed Courses",
-      value: "2",
+      value: totalCourses.toString(),
       icon: Briefcase,
       color: "text-purple-500",
       bgColor: "bg-white",
@@ -77,7 +85,7 @@ function ProfileRouteComponent() {
     },
     {
       label: "Course Not Started",
-      value: "1",
+      value: notStarted.toString(),
       icon: X,
       color: "text-slate-500",
       bgColor: "bg-white",
@@ -85,7 +93,7 @@ function ProfileRouteComponent() {
     },
     {
       label: "Course In Progress",
-      value: "0",
+      value: inProgress.toString(),
       icon: Clock,
       color: "text-orange-500",
       bgColor: "bg-white",
@@ -93,7 +101,7 @@ function ProfileRouteComponent() {
     },
     {
       label: "Course Completed",
-      value: "0",
+      value: completed.toString(),
       icon: FileText,
       color: "text-green-500",
       bgColor: "bg-white",
@@ -101,7 +109,7 @@ function ProfileRouteComponent() {
     },
     {
       label: "Course Completion %",
-      value: "0 %",
+      value: `${averageCompletion} %`,
       icon: Trophy,
       color: "text-pink-500",
       bgColor: "bg-white",
@@ -177,10 +185,10 @@ function ProfileRouteComponent() {
           />
         )}
 
-        {coursesData?.courses && (
+        {enrollments.length > 0 && (
           <OtherCourses
-            courses={coursesData.courses.slice(4, 8)}
-            title="Recent Courses"
+            courses={enrollments.slice(0, 4)}
+            title="My Enrolled Courses"
             subTitle=" "
           />
         )}

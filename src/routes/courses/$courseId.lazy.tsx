@@ -1,7 +1,13 @@
 import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useCourse, formatDuration } from "../../features/courses/courseQueries";
+import {
+  useCourse,
+  formatDuration,
+  useUserEnrollments,
+  useEnrollInCourse,
+} from "../../features/courses/courseQueries";
 import { useAuthStore } from "../../features/auth/useAuthStore";
 import { Button } from "../../components/ui/Button";
+import toast from "react-hot-toast";
 import OtherCourses from "../../features/courses/OtherCourses";
 
 export const Route = createLazyFileRoute("/courses/$courseId")({
@@ -13,6 +19,12 @@ function CourseDetailPage() {
   const navigate = useNavigate();
   const { data: course, isLoading } = useCourse(courseId);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const { data: enrollmentsData } = useUserEnrollments();
+  const enrollMutation = useEnrollInCourse();
+
+  const isEnrolled =
+    isAuthenticated &&
+    enrollmentsData?.enrollments.some((e) => e.id === course?.id);
 
   if (isLoading) {
     return (
@@ -74,19 +86,41 @@ function CourseDetailPage() {
                   <p className="text-gray-300 text-lg leading-relaxed max-w-lg">
                     {course.description}
                   </p>
-                  <div className="text-4xl font-bold text-white pt-2">
+                  {/* <div className="text-4xl font-bold text-white pt-2">
                     $0
-                  </div>
+                  </div> */}
                   <div className="pt-4">
                     <Button
                       className="w-full sm:w-auto rounded-lg bg-[#458FCE] hover:bg-[#3b7db5] px-12 py-3.5 text-base font-semibold transition-all shadow-lg"
+                      disabled={enrollMutation.isPending}
                       onClick={() => {
                         if (!isAuthenticated) {
                           navigate({ to: "/login" });
+                          return;
+                        }
+                        if (isEnrolled) {
+                          navigate({ to: "/player", search: { courseSlug: course.slug } });
+                        } else {
+                          enrollMutation.mutate(course.slug, {
+                            onSuccess: () => navigate({ to: "/player", search: { courseSlug: course.slug } }),
+                            onError: (error: any) => {
+                              const message =
+                                error.response?.data?.message ||
+                                error.message ||
+                                "Failed to enroll.";
+                              toast.error(message);
+                            },
+                          });
                         }
                       }}
                     >
-                      {isAuthenticated ? "Enroll Now" : "You Are Not Eligible"}
+                      {!isAuthenticated
+                        ? "You Are Not Eligible"
+                        : isEnrolled
+                          ? "Continue Course"
+                          : enrollMutation.isPending
+                            ? "Enrolling..."
+                            : "Enroll Now"}
                     </Button>
                   </div>
                 </div>
@@ -123,7 +157,8 @@ function CourseDetailPage() {
                   Course Content
                 </h2>
                 <p className="text-[#999DA3] text-sm mt-2">
-                  {course.sections?.length || 0} Sections | {formatDuration(course.duration)} total
+                  {course.sections?.length || 0} Sections |{" "}
+                  {formatDuration(course.duration)} total
                 </p>
               </div>
 
@@ -172,23 +207,26 @@ function CourseDetailPage() {
               </h2>
 
               <div className="space-y-6">
-                {course.available_in_package && course.available_in_package.length > 0 && (
-                  <div>
-                    <p className="text-[#4E5566] text-sm font-bold mb-3 uppercase tracking-wider">
-                      Packages
-                    </p>
-                    <div className="flex flex-wrap gap-3">
-                      {course.available_in_package.map((p) => (
-                        <span
-                          key={typeof p === 'string' ? p : p.name || p.id}
-                          className="px-8 py-2.5 rounded-full bg-linear-to-r from-[#458FCE] to-[#1A334B] text-white text-sm font-medium"
-                        >
-                          {typeof p === 'string' ? p : p.name || `Package ${p.id}`}
-                        </span>
-                      ))}
+                {course.available_in_package &&
+                  course.available_in_package.length > 0 && (
+                    <div>
+                      <p className="text-[#4E5566] text-sm font-bold mb-3 uppercase tracking-wider">
+                        Packages
+                      </p>
+                      <div className="flex flex-wrap gap-3">
+                        {course.available_in_package.map((p) => (
+                          <span
+                            key={typeof p === "string" ? p : p.name || p.id}
+                            className="px-8 py-2.5 rounded-full bg-linear-to-r from-[#458FCE] to-[#1A334B] text-white text-sm font-medium"
+                          >
+                            {typeof p === "string"
+                              ? p
+                              : p.name || `Package ${p.id}`}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
                 <div>
                   <p className="text-[#4E5566] text-sm font-bold mb-3 uppercase tracking-wider">
@@ -197,10 +235,10 @@ function CourseDetailPage() {
                   <div className="flex flex-wrap gap-3">
                     {course.skills?.map((s) => (
                       <span
-                        key={typeof s === 'string' ? s : s.name || s.id}
+                        key={typeof s === "string" ? s : s.name || s.id}
                         className="px-8 py-2.5 rounded-full bg-linear-to-r from-[#458FCE] to-[#1A334B] text-white text-sm font-medium"
                       >
-                        {typeof s === 'string' ? s : s.name}
+                        {typeof s === "string" ? s : s.name}
                       </span>
                     ))}
                   </div>
@@ -208,7 +246,9 @@ function CourseDetailPage() {
               </div>
             </section>
 
-            {course.related_courses && <OtherCourses courses={course.related_courses} />}
+            {course.related_courses && (
+              <OtherCourses courses={course.related_courses} />
+            )}
           </div>
         </div>
       </div>

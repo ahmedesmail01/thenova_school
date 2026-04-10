@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../lib/api";
 
 // ─── Raw API Types ───────────────────────────────────────────
@@ -97,8 +97,39 @@ export interface RawPaginationResponse<T> {
   filters_applied?: any;
 }
 
+export interface CourseEnrollment extends RawCourse {
+  enrollment: {
+    enrolled_at: string;
+    completed_at: string | null;
+    progress: number;
+    is_completed: boolean;
+  };
+  sections_count: number;
+  progress_percentage: number;
+}
+
+export interface LessonProgress {
+  id: number;
+  user_id: number;
+  lesson_id: number;
+  watched_seconds: number;
+  is_completed: boolean;
+  completed_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface EnrolledLesson extends RawLesson {
+  progress?: LessonProgress;
+}
+
+export interface EnrolledSection extends RawSection {
+  lessons: EnrolledLesson[];
+}
+
 export interface CourseFiltersType {
   category_id?: (string | number)[];
+  category_slug?: string;
   skills?: (string | number)[];
   level?: (string | number)[];
   package_level?: (string | number)[];
@@ -154,6 +185,9 @@ export const courseKeys = {
     [...courseKeys.all(), f, p] as const,
   detail: (slug: string) => ["course", slug] as const,
   filters: () => ["course-filters"] as const,
+  userEnrollments: () => ["course-enrollments"] as const,
+  enrolledLessons: (slug: string) => ["enrolled-lessons", slug] as const,
+  enrolledLesson: (courseSlug: string, lessonSlug: string) => ["enrolled-lesson", courseSlug, lessonSlug] as const,
 };
 
 // ─── Hooks ────────────────────────────────────────────────────
@@ -220,5 +254,81 @@ export function useCourse(slug: string) {
     },
     enabled: !!slug,
     staleTime: 1000 * 60 * 5,
+  });
+}
+
+export function useEnrollInCourse() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (slug: string) => {
+      const { data } = await api.post<{ success: boolean; message?: string }>(`/courses/user/enroll/course/${slug}`, { slug });
+      if (data.success === false) {
+        throw new Error(data.message || "Failed to enroll in the course.");
+      }
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: courseKeys.userEnrollments() });
+    },
+  });
+}
+
+export function useUserEnrollments() {
+  return useQuery<{ enrollments: CourseEnrollment[] }>({
+    queryKey: courseKeys.userEnrollments(),
+    queryFn: async () => {
+      const { data } = await api.get<{ success: boolean; data: { enrollments: any[] } }>("/courses/user/enrollments");
+      return {
+        enrollments: data.data.enrollments.map(e => ({
+          ...mapRawCourse(e),
+          enrollment: e.enrollment,
+          sections_count: e.sections_count,
+          progress_percentage: e.progress_percentage
+        }))
+      };
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
+export function useEnrolledLessons(courseSlug: string) {
+  return useQuery<{ sections: EnrolledSection[] }>({
+    queryKey: courseKeys.enrolledLessons(courseSlug),
+    queryFn: async () => {
+      const { data } = await api.get<{ success: boolean; data: { sections: EnrolledSection[] } }>(`/courses/${courseSlug}/enrolled/lessons`);
+      return data.data;
+    },
+    enabled: !!courseSlug,
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
+export function useEnrolledLesson(courseSlug: string, lessonSlug: string) {
+  return useQuery<{ lesson: EnrolledLesson; progress: LessonProgress }>({
+    queryKey: courseKeys.enrolledLesson(courseSlug, lessonSlug),
+    queryFn: async () => {
+      const { data } = await api.get<{ success: boolean; data: { lesson: EnrolledLesson; progress: LessonProgress } }>(`/courses/${courseSlug}/enrolled/lessons/${lessonSlug}`);
+      return data.data;
+    },
+    enabled: !!courseSlug && !!lessonSlug,
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
+export function useUpdateLessonProgress() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ courseSlug, lessonSlug, progress }: { courseSlug: string; lessonSlug: string; progress: { watched_seconds: number; is_completed?: boolean } }) => {
+      const { data } = await api.post<{ success: boolean; data: { lesson_progress: LessonProgress; course_progress: any } }>(
+        `/courses/${courseSlug}/enrolled/lessons/${lessonSlug}/progress`,
+        progress
+      );
+      return data.data;
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: courseKeys.enrolledLesson(variables.courseSlug, variables.lessonSlug) });
+      queryClient.invalidateQueries({ queryKey: courseKeys.enrolledLessons(variables.courseSlug) });
+      queryClient.invalidateQueries({ queryKey: courseKeys.userEnrollments() });
+    },
   });
 }

@@ -4,9 +4,16 @@ import { useState } from "react";
 interface VideoPlayerProps {
   url?: string;
   poster?: string;
+  onTimeUpdate?: (currentTime: number) => void;
+  onEnded?: () => void;
 }
 
-export function VideoPlayer({ url = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4", poster = "/images/course-1.png" }: VideoPlayerProps) {
+export function VideoPlayer({ 
+  url = "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4", 
+  poster = "/images/course-1.png",
+  onTimeUpdate,
+  onEnded
+}: VideoPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
@@ -30,6 +37,8 @@ export function VideoPlayer({ url = "https://test-videos.co.uk/vids/bigbuckbunny
           src={url}
           autoPlay
           controls
+          onTimeUpdate={(e) => onTimeUpdate?.(e.currentTarget.currentTime)}
+          onEnded={onEnded}
           className="w-full h-full object-contain bg-black"
         />
       )}
