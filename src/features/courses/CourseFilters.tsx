@@ -40,8 +40,8 @@ export function CourseFilters({ filters, onChange }: CourseFiltersProps) {
       <FilterSection title="Category" isOpen={true}>
         <CategoryFilter
           categories={categories}
-          selectedIds={filters.category_id || []}
-          onToggle={(id) => handleToggle("category_id", id)}
+          selectedSlugs={filters.category_slug || []}
+          onToggle={(slug) => handleToggle("category_slug", slug)}
         />
       </FilterSection>
     </div>

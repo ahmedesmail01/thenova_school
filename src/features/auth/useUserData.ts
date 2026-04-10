@@ -279,3 +279,51 @@ export const useDownline = (userId?: number | string) => {
     staleTime: 1000 * 60 * 5,
   });
 };
+
+// ─── Course User Profile ──────────────────────────────────────
+
+export interface RecentCourse {
+  id: number;
+  title: string;
+  level: number;
+  duration: number;
+  progress: number;
+  thumbnail: string;
+  instructor: string | null;
+  status: "not_started" | "in_progress" | "completed";
+  created_at: string;
+  last_accessed_at: string;
+}
+
+export interface CourseUserProfileData {
+  total_courses: number;
+  total_subscribed_courses: number;
+  total_not_started_courses: string | number;
+  total_in_progress_courses: string | number;
+  total_completed_courses: string | number;
+  courses_completion_percentage: number;
+  subscribed_courses_vs_percentage_completion: {
+    subscribed: number;
+    percentage: number;
+  };
+  recent_courses: RecentCourse[];
+  completed_courses: RecentCourse[];
+}
+
+/**
+ * Custom hook to fetch the authenticated user's course profile.
+ * Calls GET /courses/user/profile
+ */
+export const useCourseUserProfile = () => {
+  return useQuery<CourseUserProfileData>({
+    queryKey: ["courseUserProfile"],
+    queryFn: async () => {
+      const response = await api.get<CourseUserProfileData>(
+        "/courses/user/profile",
+      );
+      return response.data;
+    },
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+  });
+};

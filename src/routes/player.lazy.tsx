@@ -4,14 +4,14 @@ import { PlayerSidebar } from "../features/courses/components/PlayerSidebar";
 import { Navbar } from "../components/layout/Navbar";
 import { Footer } from "../components/layout/Footer";
 import { Info, Globe, FileText, Loader2 } from "lucide-react";
-import { useEnrolledLesson, useEnrolledLessons, useUpdateLessonProgress } from "../features/courses/courseQueries";
+import { useEnrolledLesson, useEnrolledLessons, useUpdateLessonProgress, useLessonStream } from "../features/courses/courseQueries";
 
 export const Route = createLazyFileRoute("/player")({
   component: PlayerPage,
 });
 
 function PlayerPage() {
-  const search: any = useSearch({ strict: false });
+  const search = useSearch({ strict: false }) as { courseSlug?: string; lessonSlug?: string };
   const navigate = useNavigate();
   const courseSlug = search.courseSlug;
   const lessonSlug = search.lessonSlug;
@@ -19,6 +19,22 @@ function PlayerPage() {
   const { data: sectionsData, isLoading: isSectionsLoading } = useEnrolledLessons(courseSlug);
   const { data: lessonData, isLoading: isLessonLoading } = useEnrolledLesson(courseSlug, lessonSlug);
   const updateProgress = useUpdateLessonProgress();
+
+  // Fetch signed Bunny.net stream URL once we have the lesson ID
+  const lessonId = lessonData?.lesson?.id;
+  const {
+    data: streamData,
+    isLoading: isStreamLoading,
+    error: streamError,
+  } = useLessonStream(lessonId);
+
+  const streamErrorMessage = streamError
+    ? (streamError as { response?: { status?: number } }).response?.status === 403
+      ? "You are not enrolled in this course."
+      : (streamError as { response?: { status?: number } }).response?.status === 404
+      ? "This video is still being processed. Check back shortly."
+      : "Could not load video. Please try again."
+    : null;
 
   const handleLessonSelect = (slug: string) => {
     navigate({ to: "/player", search: { courseSlug, lessonSlug: slug } });
@@ -102,12 +118,6 @@ function PlayerPage() {
     }
   }
 
-  const handleTimeUpdate = (currentTime: number) => {
-    if (currentTime > 0 && Math.floor(currentTime) % 10 === 0) { // Update progress roughly every 10 seconds (or debounce)
-      // Note: A real app should debounce this properly.
-    }
-  };
-
   const handleVideoEnded = () => {
     if (courseSlug && lessonSlug) {
       updateProgress.mutate({
@@ -157,9 +167,10 @@ function PlayerPage() {
             </div>
 
             <div className="space-y-6">
-              <VideoPlayer 
-                url={lessonData?.lesson?.video_id || undefined} // Fallback to placeholder if not present
-                onTimeUpdate={handleTimeUpdate}
+              <VideoPlayer
+                streamUrl={streamData?.stream_url}
+                isLoading={isStreamLoading && !!lessonId}
+                error={streamErrorMessage}
                 onEnded={handleVideoEnded}
               />
 

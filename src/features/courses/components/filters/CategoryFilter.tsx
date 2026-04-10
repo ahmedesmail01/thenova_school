@@ -3,13 +3,13 @@ import { type RawCategory } from "../../courseQueries";
 
 interface CategoryFilterProps {
   categories: RawCategory[];
-  selectedIds: (string | number)[];
-  onToggle: (id: string | number) => void;
+  selectedSlugs: string[];
+  onToggle: (slug: string) => void;
 }
 
 export function CategoryFilter({
   categories,
-  selectedIds,
+  selectedSlugs,
   onToggle,
 }: CategoryFilterProps) {
   return (
@@ -18,7 +18,7 @@ export function CategoryFilter({
         <CategoryItem
           key={cat.id}
           category={cat}
-          selectedIds={selectedIds}
+          selectedSlugs={selectedSlugs}
           onToggle={onToggle}
         />
       ))}
@@ -28,14 +28,14 @@ export function CategoryFilter({
 
 function CategoryItem({
   category,
-  selectedIds,
+  selectedSlugs,
   onToggle,
 }: {
   category: RawCategory;
-  selectedIds: (string | number)[];
-  onToggle: (id: string | number) => void;
+  selectedSlugs: string[];
+  onToggle: (slug: string) => void;
 }) {
-  const isActive = selectedIds.includes(category.id);
+  const isActive = selectedSlugs.includes(category.slug);
 
   return (
     <div className="flex flex-col border-b border-[#E9EAF0] last:border-b-0">
@@ -44,7 +44,7 @@ function CategoryItem({
           "w-full flex items-center justify-between px-4 py-3.5 transition-colors cursor-pointer",
           isActive ? "bg-[#F5F7FA]" : "hover:bg-[#F5F7FA]",
         )}
-        onClick={() => onToggle(category.id)}
+        onClick={() => onToggle(category.slug)}
       >
         <div className="flex items-center gap-3">
           <input

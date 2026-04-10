@@ -129,7 +129,7 @@ export interface EnrolledSection extends RawSection {
 
 export interface CourseFiltersType {
   category_id?: (string | number)[];
-  category_slug?: string;
+  category_slug?: string[];
   skills?: (string | number)[];
   level?: (string | number)[];
   package_level?: (string | number)[];
@@ -187,7 +187,9 @@ export const courseKeys = {
   filters: () => ["course-filters"] as const,
   userEnrollments: () => ["course-enrollments"] as const,
   enrolledLessons: (slug: string) => ["enrolled-lessons", slug] as const,
-  enrolledLesson: (courseSlug: string, lessonSlug: string) => ["enrolled-lesson", courseSlug, lessonSlug] as const,
+  enrolledLesson: (courseSlug: string, lessonSlug: string) =>
+    ["enrolled-lesson", courseSlug, lessonSlug] as const,
+  lessonStream: (lessonId: number) => ["lesson-stream", lessonId] as const,
 };
 
 // ─── Hooks ────────────────────────────────────────────────────
@@ -261,7 +263,10 @@ export function useEnrollInCourse() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (slug: string) => {
-      const { data } = await api.post<{ success: boolean; message?: string }>(`/courses/user/enroll/course/${slug}`, { slug });
+      const { data } = await api.post<{ success: boolean; message?: string }>(
+        `/courses/user/enroll/course/${slug}`,
+        { slug },
+      );
       if (data.success === false) {
         throw new Error(data.message || "Failed to enroll in the course.");
       }
@@ -277,14 +282,17 @@ export function useUserEnrollments() {
   return useQuery<{ enrollments: CourseEnrollment[] }>({
     queryKey: courseKeys.userEnrollments(),
     queryFn: async () => {
-      const { data } = await api.get<{ success: boolean; data: { enrollments: any[] } }>("/courses/user/enrollments");
+      const { data } = await api.get<{
+        success: boolean;
+        data: { enrollments: any[] };
+      }>("/courses/user/enrollments");
       return {
-        enrollments: data.data.enrollments.map(e => ({
+        enrollments: data.data.enrollments.map((e) => ({
           ...mapRawCourse(e),
           enrollment: e.enrollment,
           sections_count: e.sections_count,
-          progress_percentage: e.progress_percentage
-        }))
+          progress_percentage: e.progress_percentage,
+        })),
       };
     },
     staleTime: 1000 * 60 * 5,
@@ -295,7 +303,10 @@ export function useEnrolledLessons(courseSlug: string) {
   return useQuery<{ sections: EnrolledSection[] }>({
     queryKey: courseKeys.enrolledLessons(courseSlug),
     queryFn: async () => {
-      const { data } = await api.get<{ success: boolean; data: { sections: EnrolledSection[] } }>(`/courses/${courseSlug}/enrolled/lessons`);
+      const { data } = await api.get<{
+        success: boolean;
+        data: { sections: EnrolledSection[] };
+      }>(`/courses/${courseSlug}/enrolled/lessons`);
       return data.data;
     },
     enabled: !!courseSlug,
@@ -307,7 +318,10 @@ export function useEnrolledLesson(courseSlug: string, lessonSlug: string) {
   return useQuery<{ lesson: EnrolledLesson; progress: LessonProgress }>({
     queryKey: courseKeys.enrolledLesson(courseSlug, lessonSlug),
     queryFn: async () => {
-      const { data } = await api.get<{ success: boolean; data: { lesson: EnrolledLesson; progress: LessonProgress } }>(`/courses/${courseSlug}/enrolled/lessons/${lessonSlug}`);
+      const { data } = await api.get<{
+        success: boolean;
+        data: { lesson: EnrolledLesson; progress: LessonProgress };
+      }>(`/courses/${courseSlug}/enrolled/lessons/${lessonSlug}`);
       return data.data;
     },
     enabled: !!courseSlug && !!lessonSlug,
@@ -318,17 +332,53 @@ export function useEnrolledLesson(courseSlug: string, lessonSlug: string) {
 export function useUpdateLessonProgress() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ courseSlug, lessonSlug, progress }: { courseSlug: string; lessonSlug: string; progress: { watched_seconds: number; is_completed?: boolean } }) => {
-      const { data } = await api.post<{ success: boolean; data: { lesson_progress: LessonProgress; course_progress: any } }>(
+    mutationFn: async ({
+      courseSlug,
+      lessonSlug,
+      progress,
+    }: {
+      courseSlug: string;
+      lessonSlug: string;
+      progress: { watched_seconds: number; is_completed?: boolean };
+    }) => {
+      const { data } = await api.post<{
+        success: boolean;
+        data: { lesson_progress: LessonProgress; course_progress: unknown };
+      }>(
         `/courses/${courseSlug}/enrolled/lessons/${lessonSlug}/progress`,
-        progress
+        progress,
       );
       return data.data;
     },
     onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: courseKeys.enrolledLesson(variables.courseSlug, variables.lessonSlug) });
-      queryClient.invalidateQueries({ queryKey: courseKeys.enrolledLessons(variables.courseSlug) });
+      queryClient.invalidateQueries({
+        queryKey: courseKeys.enrolledLesson(
+          variables.courseSlug,
+          variables.lessonSlug,
+        ),
+      });
+      queryClient.invalidateQueries({
+        queryKey: courseKeys.enrolledLessons(variables.courseSlug),
+      });
       queryClient.invalidateQueries({ queryKey: courseKeys.userEnrollments() });
     },
+  });
+}
+
+// Fetches a signed, expiring Bunny.net stream URL for a lesson.
+// Per the integration guide the URL expires in 2 hours — staleTime is 90 min.
+export function useLessonStream(lessonId: number | undefined) {
+  return useQuery<{ stream_url: string }>({
+    queryKey: courseKeys.lessonStream(lessonId!),
+    queryFn: async () => {
+      const { data } = await api.get<{ stream_url: string }>(
+        `/courses/lessons/${lessonId}/stream`,
+      );
+      return data;
+    },
+    enabled: !!lessonId,
+    staleTime: 1000 * 60 * 90, // 90 minutes
+    gcTime: 1000 * 60 * 100, // keep in cache ~100 min
+    retry: false, // 403/404 shouldn't be retried
   });
 }
