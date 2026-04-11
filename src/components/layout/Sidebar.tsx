@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Network,
@@ -37,7 +37,7 @@ export function Sidebar({
 
   const handleLogout = () => {
     logout();
-    navigate({ to: "/" });
+    navigate("/");
   };
 
   const logo = "/images/logo-gray.png";

@@ -1,4 +1,4 @@
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from 'react-router-dom';
 import {
   AlertCircle,
   Loader2,
@@ -25,9 +25,6 @@ import {
   formatLevel,
 } from "../../features/courses/courseQueries";
 
-export const Route = createLazyFileRoute("/_auth/profile")({
-  component: ProfileRouteComponent,
-});
 
 const STORAGE_URL = import.meta.env.VITE_API_BASE + "/storage/";
 
@@ -37,7 +34,7 @@ function getThumbnailUrl(thumbnail: string) {
   return `${STORAGE_URL}${thumbnail}`;
 }
 
-function ProfileRouteComponent() {
+export default function ProfileRouteComponent() {
   const { data, isLoading, error } = useUserData();
   const { data: courseProfile, isLoading: courseProfileLoading } =
     useCourseUserProfile();
@@ -247,10 +244,7 @@ function ProfileRouteComponent() {
                     key={course.id}
                     course={course}
                     onClick={() =>
-                      navigate({
-                        to: "/courses/$courseId",
-                        params: { courseId: course.id.toString() },
-                      })
+                      navigate(`/courses/${course.id}`)
                     }
                   />
                 ))}
@@ -270,10 +264,7 @@ function ProfileRouteComponent() {
                     course={course}
                     showCompleted
                     onClick={() =>
-                      navigate({
-                        to: "/courses/$courseId",
-                        params: { courseId: course.id.toString() },
-                      })
+                      navigate(`/courses/${course.id}`)
                     }
                   />
                 ))}

@@ -1,14 +1,10 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { useCommissionSummary } from "../../features/wallet/useCommissionSummary";
 import { CommissionHistoryTable } from "../../features/wallet/components/CommissionHistoryTable";
 import { CommissionFilters } from "../../features/wallet/components/CommissionFilters";
 
-export const Route = createLazyFileRoute("/_auth/commissions")({
-  component: CommissionsRouteComponent,
-});
 
-function CommissionsRouteComponent() {
+export default function CommissionsRouteComponent() {
   const { data, isLoading } = useCommissionSummary();
   const [selectedDate, setSelectedDate] = useState("");
 

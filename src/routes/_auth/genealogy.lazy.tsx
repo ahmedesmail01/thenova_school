@@ -1,4 +1,3 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import { TransformWrapper } from "react-zoom-pan-pinch";
 import { GenealogyFilters } from "../../components/genealogy/GenealogyFilters";
 import { GenealogyTree } from "../../components/genealogy/GenealogyTree";
@@ -8,11 +7,8 @@ import { Loader2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
-export const Route = createLazyFileRoute("/_auth/genealogy")({
-  component: RouteComponent,
-});
 
-function RouteComponent() {
+export default function RouteComponent() {
   const [searchUserId, setSearchUserId] = useState<string | undefined>(
     undefined,
   );

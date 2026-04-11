@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 
 export default function SummaryCard({
   icon: Icon,
@@ -27,7 +27,7 @@ export default function SummaryCard({
         </div>
         {showAll && (
           <Link
-            to={link}
+            to={link || "#"}
             className="text-[14px] font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-lg uppercase tracking-wider hover:bg-blue-100 transition-colors"
           >
             Show All

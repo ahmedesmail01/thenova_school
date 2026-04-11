@@ -1,4 +1,3 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { TeamSalesCard } from "../../components/dashboard/TeamSalesCard";
@@ -13,11 +12,8 @@ import Activites from "../../components/dashboard/Activites";
 import TeamPerformanceCard from "../../components/dashboard/TeamPerformanceCard";
 import { useDashboardData } from "../../hooks/dashboard/useDashboardData";
 
-export const Route = createLazyFileRoute("/_auth/dashboard")({
-  component: RouteComponent,
-});
 
-function RouteComponent() {
+export default function RouteComponent() {
   const { data, isLoading } = useDashboardData();
 
   if (isLoading) {

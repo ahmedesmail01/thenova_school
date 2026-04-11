@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/Button";
 import { useAuthStore } from "../../features/auth/useAuthStore";
 import { useUserData } from "../../features/auth/useUserData";
@@ -38,7 +38,7 @@ export function Navbar() {
     logout();
     setMenuOpen(false);
     setShowUserDropdown(false);
-    navigate({ to: "/" });
+    navigate("/");
   };
 
   // Suppress unused warning — kept for any legacy usage
@@ -57,12 +57,6 @@ export function Navbar() {
               (e.target as HTMLImageElement).style.display = "none";
             }}
           />
-          {/* <div className="w-10 h-10 bg-brand-blue rounded-lg flex items-center justify-center text-white font-bold text-xl group-hover:scale-105 transition-transform">
-            N
-          </div>
-          <span className="text-white font-bold tracking-widest hidden sm:inline">
-            NOVA GROUP
-          </span> */}
         </Link>
 
         {/* Desktop links */}
@@ -71,7 +65,7 @@ export function Navbar() {
             href="https://test.thenovagroupco.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
+            className="text-text-secondary hover:text-brand-blue-light transition-colors"
           >
             Home
           </a>
@@ -79,13 +73,13 @@ export function Navbar() {
             href="https://test.thenovagroupco.com/packages"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
+            className="text-text-secondary hover:text-brand-blue-light transition-colors"
           >
             Packages
           </a>
           <Link
             to="/courses"
-            className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
+            className="text-text-secondary hover:text-brand-blue-light transition-colors"
           >
             Courses
           </Link>
@@ -150,22 +144,6 @@ export function Navbar() {
                     </div>
                     <ChevronRight className="w-4 h-4 text-dash-muted opacity-0 group-hover:opacity-100 transition-all translate-x-[-4px] group-hover:translate-x-0" />
                   </Link>
-
-                  {/* <Link
-                    to="/dashboard"
-                    onClick={() => setShowUserDropdown(false)}
-                    className="group flex items-center justify-between w-full p-2.5 rounded-xl text-dash-text hover:bg-dash-bg transition-all mt-1"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-dash-bg rounded-lg group-hover:bg-white transition-colors">
-                        <LayoutDashboard className="w-4 h-4 text-dash-muted group-hover:text-dash-accent" />
-                      </div>
-                      <span className="text-sm font-medium text-dash-text">
-                        Dashboard
-                      </span>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-dash-muted opacity-0 group-hover:opacity-100 transition-all translate-x-[-4px] group-hover:translate-x-0" />
-                  </Link> */}
 
                   <div className="h-px bg-dash-border/50 my-2 mx-2" />
 
@@ -238,7 +216,7 @@ export function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
-            className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
+            className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors"
           >
             Home
           </a>
@@ -247,7 +225,7 @@ export function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setMenuOpen(false)}
-            className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
+            className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors"
           >
             Packages
           </a>
@@ -258,19 +236,19 @@ export function Navbar() {
           >
             Courses
           </Link>
-          <Link
-            to="/about"
+          <a
+            href="/about"
             onClick={() => setMenuOpen(false)}
             className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors"
           >
             About
-          </Link>
+          </a>
           <hr className="border-brand-border my-1" />
           <div className="flex flex-col gap-2">
             {isAuthenticated ? (
               <>
                 <Link
-                  to="/dashboard"
+                  to="/profile"
                   onClick={() => setMenuOpen(false)}
                   className="flex items-center gap-3 text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors"
                 >

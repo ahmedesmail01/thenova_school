@@ -1,4 +1,3 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useUserTank } from "../../features/tank/useUserTank";
 import { useUserData } from "../../features/auth/useUserData";
@@ -9,11 +8,8 @@ import { TankHeader } from "../../features/tank/components/TankHeader";
 import { TankMemberCard } from "../../features/tank/components/TankMemberCard";
 import { TankPagination } from "../../features/tank/components/TankPagination";
 
-export const Route = createLazyFileRoute("/_auth/tank")({
-  component: TankRouteComponent,
-});
 
-function TankRouteComponent() {
+export default function TankRouteComponent() {
   const [currentPage, setCurrentPage] = useState(1);
   const {
     data: tankData,

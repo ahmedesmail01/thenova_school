@@ -1,4 +1,3 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import { TopStatCard } from "../../features/wallet/components/TopStatCard";
 import { EarningsHero } from "../../features/wallet/components/EarningsHero";
 import { WeeklyEarningsChart } from "../../features/wallet/components/WeeklyEarningsChart";
@@ -11,11 +10,8 @@ import { TransactionsForm } from "../../features/wallet/components/TransactionsF
 import { useWalletData } from "../../hooks/dashboard/useWalletData";
 import { formatPrice } from "../../lib/utils";
 
-export const Route = createLazyFileRoute("/_auth/wallet")({
-  component: WalletRouteComponent,
-});
 
-function WalletRouteComponent() {
+export default function WalletRouteComponent() {
   const { data: walletData, isLoading: isWalletLoading } = useWalletData();
 
   return (

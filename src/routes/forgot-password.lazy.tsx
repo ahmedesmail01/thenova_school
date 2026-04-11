@@ -1,4 +1,4 @@
-import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,21 +7,16 @@ import { z } from "zod";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import api from "../lib/api";
-import logo from "../../public/images/nova-logo.png";
+const logo = "/images/nova-logo.png";
 import { Eye, EyeClosed, ArrowLeft, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
-export const Route = createLazyFileRoute("/forgot-password")({
-  component: ForgotPasswordPage,
-});
 
 const step1Schema = z.object({
   identifier: z.string().min(3, "Email or phone is required"),
-});
 
 const step2Schema = z.object({
   code: z.string().min(4, "Code must be at least 4 characters"),
-});
 
 const step3Schema = z
   .object({
@@ -63,7 +58,7 @@ interface VerifyOtpResponse {
   message: string | Record<string, string[]>;
 }
 
-function ForgotPasswordPage() {
+export default function ForgotPasswordPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [emailOrPhone, setEmailOrPhone] = useState("");
@@ -189,7 +184,7 @@ function ForgotPasswordPage() {
     },
     onSuccess: () => {
       toast.success("Password reset successfully!");
-      navigate({ to: "/login" });
+      navigate("/login");
     },
     onError: (error: unknown) => {
       const axiosError = error as {

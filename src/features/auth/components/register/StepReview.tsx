@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { Button } from "../../../../components/ui/Button";
 import api from "../../../../lib/api";
@@ -58,7 +58,7 @@ export function StepReview({
       // If registration succeeded but no automatic login data (user/token) was returned
       if (status && (!user || !token)) {
         toast.success(message || "Registration successful! Please login.");
-        navigate({ to: "/login" });
+        navigate("/login");
         return;
       }
 

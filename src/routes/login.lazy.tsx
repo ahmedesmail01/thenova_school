@@ -1,4 +1,4 @@
-import { createLazyFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,18 +9,14 @@ import { useAuthStore } from "../features/auth/useAuthStore";
 import api from "../lib/api";
 import { loginSchema } from "../features/auth/schemas";
 import type { LoginSchema } from "../features/auth/schemas";
-import logo from "../../public/images/nova-logo.png";
+const logo = "/images/nova-logo.png";
 import { Eye, EyeClosed } from "lucide-react";
 import { getCookie } from "../lib/getCookie";
 
-export const Route = createLazyFileRoute("/login")({
-  component: LoginPage,
-});
-
-function LoginPage() {
+export default function LoginPage() {
   const navigate = useNavigate();
-  const search = useSearch({ from: "/login" }) as { redirect?: string };
-  const redirectParam = search.redirect || "/profile";
+  const [searchParams] = useSearchParams();
+  const redirectParam = searchParams.get("redirect") || "/profile";
   const setUser = useAuthStore((s) => s.setUser);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [showPassword, setShowPassword] = useState(false);
@@ -49,17 +45,13 @@ function LoginPage() {
 
     onSuccess: async (response) => {
       try {
-        // if backend returns user directly
         if (response.data?.user) {
           setUser(response.data.user);
         } else {
-          // otherwise fetch current authenticated user from cookie session
           const meResponse = await api.get("/user/data");
           setUser(meResponse.data.user ?? meResponse.data);
         }
-
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        navigate({ to: redirectParam as any });
+        navigate(redirectParam);
       } catch (error) {
         console.error("Failed to load authenticated user after login:", error);
       }
@@ -71,8 +63,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      navigate({ to: redirectParam as any });
+      navigate(redirectParam);
     }
   }, [isAuthenticated, navigate, redirectParam]);
 
@@ -169,8 +160,7 @@ function LoginPage() {
           <p className="text-center text-sm text-text-secondary">
             Don't have an account?{" "}
             <Link
-              to="/register"
-              search={search.redirect ? { redirect: search.redirect } : undefined}
+              to={`/register${searchParams.get("redirect") ? `?redirect=${searchParams.get("redirect")}` : ""}`}
               className="text-white font-semibold hover:text-brand-blue-light transition-colors underline underline-offset-2"
             >
               Create Account →

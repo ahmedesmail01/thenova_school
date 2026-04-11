@@ -1,5 +1,5 @@
 import { CourseCard } from "../../components/ui/CourseCard";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "react-router-dom";
 import type { RawCourse } from "./courseQueries";
 
 type Props = {
@@ -34,18 +34,8 @@ const OtherCourses = ({
           <div key={c.id} className="min-w-[260px] sm:min-w-0">
             <CourseCard
               course={c}
-              onViewDetails={(id) =>
-                navigate({
-                  to: "/courses/$courseId",
-                  params: { courseId: id },
-                })
-              }
-              onPackage={(id) =>
-                navigate({
-                  to: "/courses/$courseId",
-                  params: { courseId: id },
-                })
-              }
+              onViewDetails={(id) => navigate(`/courses/${id}`)}
+              onPackage={(id) => navigate(`/courses/${id}`)}
             />
           </div>
         ))}

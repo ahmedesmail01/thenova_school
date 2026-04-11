@@ -1,4 +1,4 @@
-import heroBg from "../../../public/images/hero-bg.png";
+const heroBg = "/images/hero-bg.png";
 
 export function HeroSection() {
   return (

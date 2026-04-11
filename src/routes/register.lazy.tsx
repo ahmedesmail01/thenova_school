@@ -1,23 +1,14 @@
-import {
-  createLazyFileRoute,
-  Link,
-  useNavigate,
-  useSearch,
-} from "@tanstack/react-router";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { Stepper } from "../components/ui/Stepper";
 import { useAuthStore } from "../features/auth/useAuthStore";
 import type { SignUpData } from "../features/auth/schemas";
-import logo from "../../public/images/nova-logo.png";
+const logo = "/images/nova-logo.png";
 import { StepSponsorId } from "../features/auth/components/register/StepSponsorId";
 import { StepConfirmSponsorId } from "../features/auth/components/register/StepConfirmSponsorId";
 import { StepAccountDetails } from "../features/auth/components/register/StepAccountDetails";
 import { StepCreatePin } from "../features/auth/components/register/StepCreatePin";
 import { StepReview } from "../features/auth/components/register/StepReview";
-
-export const Route = createLazyFileRoute("/register")({
-  component: RegisterPage,
-});
 
 const STEPS = [
   "Sponsor ID",
@@ -27,18 +18,16 @@ const STEPS = [
   "Review",
 ];
 
-function RegisterPage() {
+export default function RegisterPage() {
   const navigate = useNavigate();
-  const search = useSearch({ from: "/register" }) as {
-    sponsorId?: string;
-    redirect?: string;
-  };
-  const redirectParam = search.redirect || "/dashboard";
+  const [searchParams] = useSearchParams();
+  const sponsorId = searchParams.get("sponsorId") || undefined;
+  const redirectParam = searchParams.get("redirect") || "/dashboard";
   const setUser = useAuthStore((s) => s.setUser);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const [step, setStep] = useState(search.sponsorId ? 1 : 0);
+  const [step, setStep] = useState(sponsorId ? 1 : 0);
   const [formData, setFormData] = useState<SignUpData>({
-    sponsorId: search.sponsorId,
+    sponsorId,
   });
 
   const next = (data: Partial<SignUpData>) => {
@@ -48,7 +37,7 @@ function RegisterPage() {
   const back = () => setStep((s) => s - 1);
 
   if (isAuthenticated) {
-    navigate({ to: redirectParam as any });
+    navigate(redirectParam);
     return null;
   }
 
@@ -64,7 +53,7 @@ function RegisterPage() {
             <button
               type="button"
               className="text-white text-2xl leading-none px-1"
-              onClick={() => navigate({ to: "/" })}
+              onClick={() => navigate("/")}
             >
               ×
             </button>
@@ -115,7 +104,7 @@ function RegisterPage() {
                 onBack={back}
                 onSuccess={(user) => {
                   setUser(user);
-                  navigate({ to: redirectParam as any });
+                  navigate(redirectParam);
                 }}
               />
             )}
@@ -123,8 +112,7 @@ function RegisterPage() {
           <p className="text-center mt-6 text-sm text-text-secondary">
             Already have an account?{" "}
             <Link
-              to="/login"
-              search={search.redirect ? { redirect: search.redirect } : undefined}
+              to={`/login${searchParams.get("redirect") ? `?redirect=${searchParams.get("redirect")}` : ""}`}
               className="text-white font-semibold hover:text-brand-blue-light underline underline-offset-2 transition-colors"
             >
               Login →

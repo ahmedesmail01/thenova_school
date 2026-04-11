@@ -1,4 +1,4 @@
-import { createLazyFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   useCourse,
   formatDuration,
@@ -10,14 +10,10 @@ import { Button } from "../../components/ui/Button";
 import toast from "react-hot-toast";
 import OtherCourses from "../../features/courses/OtherCourses";
 
-export const Route = createLazyFileRoute("/courses/$courseId")({
-  component: CourseDetailPage,
-});
-
-function CourseDetailPage() {
-  const { courseId } = Route.useParams();
+export default function CourseDetailPage() {
+  const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
-  const { data: course, isLoading } = useCourse(courseId);
+  const { data: course, isLoading } = useCourse(courseId || "");
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const { data: enrollmentsData } = useUserEnrollments();
   const enrollMutation = useEnrollInCourse();
@@ -86,23 +82,20 @@ function CourseDetailPage() {
                   <p className="text-gray-300 text-lg leading-relaxed max-w-lg">
                     {course.description}
                   </p>
-                  {/* <div className="text-4xl font-bold text-white pt-2">
-                    $0
-                  </div> */}
                   <div className="pt-4">
                     <Button
                       className="w-full sm:w-auto rounded-lg bg-[#458FCE] hover:bg-[#3b7db5] px-12 py-3.5 text-base font-semibold transition-all shadow-lg"
                       disabled={enrollMutation.isPending}
                       onClick={() => {
                         if (!isAuthenticated) {
-                          navigate({ to: "/login" });
+                          navigate("/login");
                           return;
                         }
                         if (isEnrolled) {
-                          navigate({ to: "/player", search: { courseSlug: course.slug } });
+                          navigate(`/player?courseSlug=${course.slug}`);
                         } else {
                           enrollMutation.mutate(course.slug, {
-                            onSuccess: () => navigate({ to: "/player", search: { courseSlug: course.slug } }),
+                            onSuccess: () => navigate(`/player?courseSlug=${course.slug}`),
                             onError: (error: any) => {
                               const message =
                                 error.response?.data?.message ||

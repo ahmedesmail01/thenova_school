@@ -1,4 +1,3 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import { usePackages, type Package } from "../../features/wallet/usePackages";
 import api from "../../lib/api";
@@ -10,11 +9,8 @@ import { MembershipCard } from "../../features/membership/components/MembershipC
 import { DetailsModal } from "../../features/membership/components/DetailsModal";
 import { PaymentChoiceModal } from "../../features/membership/components/PaymentChoiceModal";
 
-export const Route = createLazyFileRoute("/_auth/membership")({
-  component: MembershipRouteComponent,
-});
 
-function MembershipRouteComponent() {
+export default function MembershipRouteComponent() {
   const [activeTab, setActiveTab] = useState("nova pro");
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);

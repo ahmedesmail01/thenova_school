@@ -1,12 +1,9 @@
-import { createLazyFileRoute, Link } from "@tanstack/react-router";
+import { Link } from 'react-router-dom';
 import { PolicyContainer } from "../components/common/PolicyContainer";
 import { useAuthStore } from "../features/auth/useAuthStore";
 
-export const Route = createLazyFileRoute("/cookie-policy")({
-  component: CookiePolicy,
-});
 
-function CookiePolicy() {
+export default function CookiePolicy() {
   const { isAuthenticated } = useAuthStore();
 
   const sections = [

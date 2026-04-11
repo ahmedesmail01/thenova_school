@@ -1,5 +1,5 @@
 import React from "react";
-import heroBg from "../../../public/images/hero-bg.png";
+const heroBg = "/images/hero-bg.png";
 import { Clock } from "lucide-react";
 
 interface PolicySection {

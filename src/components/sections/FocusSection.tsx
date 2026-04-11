@@ -1,4 +1,4 @@
-import unsplashVideo from "../../../public/images/unsplash-videopng.png";
+const unsplashVideo = "/images/unsplash-videopng.png";
 
 const FOCUS_ITEMS = [
   {

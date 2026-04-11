@@ -1,4 +1,3 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { usePackages, type Package } from "../features/wallet/usePackages";
 import api from "../lib/api";
@@ -9,11 +8,8 @@ import { MembershipDetailedCard } from "../features/membership/components/Member
 import { PaymentChoiceModal } from "../features/membership/components/PaymentChoiceModal";
 import { useAuthStore } from "../features/auth/useAuthStore";
 
-export const Route = createLazyFileRoute("/packages")({
-  component: PackagesPage,
-});
 
-function PackagesPage() {
+export default function PackagesPage() {
   const { isAuthenticated } = useAuthStore();
   const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);

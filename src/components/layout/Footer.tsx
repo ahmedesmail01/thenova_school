@@ -1,11 +1,11 @@
-import { Link } from "@tanstack/react-router";
-import logoImg from "../../../public/images/nova-logo.png";
-import phoneIcon from "../../../public/images/phone-icon.png";
-import locationIcon from "../../../public/images/location-icon.png";
-import emailIcon from "../../../public/images/email-icon.png";
-import facebookIcon from "../../../public/images/facebook-icon.png";
-import instagramIcon from "../../../public/images/instagram-icon.png";
-import xIcon from "../../../public/images/x-icon.png";
+import { Link } from "react-router-dom";
+const logoImg = "/images/nova-logo.png";
+const phoneIcon = "/images/phone-icon.png";
+const locationIcon = "/images/location-icon.png";
+const emailIcon = "/images/email-icon.png";
+const facebookIcon = "/images/facebook-icon.png";
+const instagramIcon = "/images/instagram-icon.png";
+const xIcon = "/images/x-icon.png";
 
 export function Footer() {
   return (

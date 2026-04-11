@@ -1,17 +1,12 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 
-export const Route = createLazyFileRoute("/_auth/nova-pro")({
-  component: NovaProRouteComponent,
-});
 
 // Mock data based on the screenshot provided
 const novaTransactions = Array(8).fill({
   amount: "$75.00",
   percentage: "%99",
   date: "23/11/2025, 8:22:57 PM",
-});
 
-function ActionBar() {
+export default function ActionBar() {
   return (
     <div className="flex flex-wrap items-center gap-3 mb-8 mx-auto pl-4">
       {/* Read-only Stats */}
@@ -39,7 +34,7 @@ function ActionBar() {
   );
 }
 
-function NovaProTable() {
+export default function NovaProTable() {
   return (
     <div className="w-full overflow-x-auto">
       <table className="w-full text-left border-collapse min-w-[700px]">
@@ -79,7 +74,7 @@ function NovaProTable() {
   );
 }
 
-function NovaProPagination() {
+export default function NovaProPagination() {
   return (
     <div className="flex items-center justify-center gap-2 mt-auto pt-8 pb-4">
       <button className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors shadow-sm border border-slate-100 font-bold text-xs">
@@ -107,7 +102,7 @@ function NovaProPagination() {
   );
 }
 
-function NovaProRouteComponent() {
+export default function NovaProRouteComponent() {
   return (
     <div className="min-h-[calc(100vh-100px)]  bg-[#f8fafc] w-full max-w-[1500px] mx-auto">
       <div className="bg-white rounded-3xl shadow-sm border border-slate-100 p-8 min-h-[85vh] flex flex-col">

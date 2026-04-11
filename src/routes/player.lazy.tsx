@@ -1,4 +1,4 @@
-import { createLazyFileRoute, Link, useSearch, useNavigate } from "@tanstack/react-router";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { VideoPlayer } from "../features/courses/components/VideoPlayer";
 import { PlayerSidebar } from "../features/courses/components/PlayerSidebar";
 import { Navbar } from "../components/layout/Navbar";
@@ -6,18 +6,14 @@ import { Footer } from "../components/layout/Footer";
 import { Info, Globe, FileText, Loader2 } from "lucide-react";
 import { useEnrolledLesson, useEnrolledLessons, useUpdateLessonProgress, useLessonStream } from "../features/courses/courseQueries";
 
-export const Route = createLazyFileRoute("/player")({
-  component: PlayerPage,
-});
-
-function PlayerPage() {
-  const search = useSearch({ strict: false }) as { courseSlug?: string; lessonSlug?: string };
+export default function PlayerPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const courseSlug = search.courseSlug;
-  const lessonSlug = search.lessonSlug;
+  const courseSlug = searchParams.get("courseSlug") || undefined;
+  const lessonSlug = searchParams.get("lessonSlug") || undefined;
 
-  const { data: sectionsData, isLoading: isSectionsLoading } = useEnrolledLessons(courseSlug);
-  const { data: lessonData, isLoading: isLessonLoading } = useEnrolledLesson(courseSlug, lessonSlug);
+  const { data: sectionsData, isLoading: isSectionsLoading } = useEnrolledLessons(courseSlug ?? "");
+  const { data: lessonData, isLoading: isLessonLoading } = useEnrolledLesson(courseSlug ?? "", lessonSlug ?? "");
   const updateProgress = useUpdateLessonProgress();
 
   // Fetch signed Bunny.net stream URL once we have the lesson ID
@@ -37,7 +33,7 @@ function PlayerPage() {
     : null;
 
   const handleLessonSelect = (slug: string) => {
-    navigate({ to: "/player", search: { courseSlug, lessonSlug: slug } });
+    setSearchParams({ courseSlug: courseSlug || "", lessonSlug: slug });
   };
 
   const handleNext = () => {
@@ -114,7 +110,7 @@ function PlayerPage() {
   if (sectionsData?.sections && !lessonSlug) {
     const firstLesson = sectionsData.sections[0]?.lessons?.[0];
     if (firstLesson) {
-      navigate({ to: "/player", search: { courseSlug, lessonSlug: firstLesson.slug }, replace: true });
+      navigate(`/player?courseSlug=${courseSlug}&lessonSlug=${firstLesson.slug}`, { replace: true });
     }
   }
 

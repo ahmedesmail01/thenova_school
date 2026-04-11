@@ -1,4 +1,4 @@
-import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import {
   useCourses,
@@ -10,11 +10,8 @@ import { CourseCard } from "../../components/ui/CourseCard";
 import { Pagination } from "../../components/ui/Pagination";
 import CoursesHero from "../../components/courses/CoursesHero";
 
-export const Route = createLazyFileRoute("/courses/")({
-  component: CoursesPage,
-});
 
-function CoursesPage() {
+export default function CoursesPage() {
   const navigate = useNavigate();
   const [filters, setFilters] = useState<CourseFiltersType>({});
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);

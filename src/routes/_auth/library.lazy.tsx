@@ -1,15 +1,11 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import { useAuthStore } from "../../features/auth/useAuthStore";
 import { useCourses } from "../../features/courses/courseQueries";
 import { CourseGridSkeleton } from "../../features/courses/CourseGridSkeleton";
 import { CourseCard } from "../../components/ui/CourseCard";
 import { Badge } from "../../components/ui/Badge";
 
-export const Route = createLazyFileRoute("/_auth/library")({
-  component: LibraryPage,
-});
 
-function LibraryPage() {
+export default function LibraryPage() {
   const { user } = useAuthStore();
   // For the library, we might want to filter by "enrolled" or similar.
   // Using dummy data for now.

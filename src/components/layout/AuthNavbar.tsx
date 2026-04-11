@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { useAuthStore } from "../../features/auth/useAuthStore";
 import { useState } from "react";
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { cn } from "../../lib/utils";
 import { useUserData } from "../../features/auth/useUserData";
 
@@ -22,7 +22,7 @@ export function AuthNavbar({ onMenuClick }: AuthNavbarProps) {
   const { data: user, isLoading } = useUserData();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
-  const { location } = useRouterState();
+  const { pathname } = useLocation();
 
   // console.log("user is ", user);
 
@@ -34,11 +34,11 @@ export function AuthNavbar({ onMenuClick }: AuthNavbarProps) {
     );
   };
 
-  const title = getTitle(location.pathname);
+  const title = getTitle(pathname);
 
   const handleLogout = () => {
     logout();
-    navigate({ to: "/" });
+    navigate("/");
   };
 
   if (isLoading) {

@@ -1,12 +1,8 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import { RankRewardCard } from "../../components/dashboard/RankRewardCard";
 import { useMyRanks } from "../../features/wallet/useMyRanks";
 
-export const Route = createLazyFileRoute("/_auth/rank-reward")({
-  component: RankRewardPage,
-});
 
-function RankRewardPage() {
+export default function RankRewardPage() {
   const { data, isLoading } = useMyRanks();
 
   if (isLoading) {

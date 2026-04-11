@@ -1,12 +1,9 @@
-import { createLazyFileRoute, Link } from "@tanstack/react-router";
+import { Link } from 'react-router-dom';
 import { PolicyContainer } from "../components/common/PolicyContainer";
 import { useAuthStore } from "../features/auth/useAuthStore";
 
-export const Route = createLazyFileRoute("/disclaimer")({
-  component: Disclaimer,
-});
 
-function Disclaimer() {
+export default function Disclaimer() {
   const { isAuthenticated } = useAuthStore();
 
   const sections = [

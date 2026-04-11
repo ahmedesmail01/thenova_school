@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../features/auth/useAuthStore";
 
 export function NavbarAuth() {
@@ -10,7 +10,7 @@ export function NavbarAuth() {
   const handleLogout = () => {
     logout();
     setDropdownOpen(false);
-    navigate({ to: "/" });
+    navigate("/");
   };
 
   return (

@@ -1,4 +1,3 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import { Ticket, Eye, X, Loader2 } from "lucide-react";
 import { useState } from "react";
 import api from "../../lib/api";
@@ -8,9 +7,6 @@ import * as z from "zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-export const Route = createLazyFileRoute("/_auth/support")({
-  component: SupportRouteComponent,
-});
 
 type SupportTicket = {
   id: number;
@@ -26,7 +22,6 @@ type SupportTicket = {
 const ticketSchema = z.object({
   subject: z.string().min(3, "Subject must be at least 3 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
-});
 
 type TicketFormValues = z.infer<typeof ticketSchema>;
 
@@ -227,7 +222,7 @@ function TicketDetailsModal({
   );
 }
 
-function SupportPagination() {
+export default function SupportPagination() {
   return (
     <div className="flex items-center justify-center gap-2 mt-auto pt-12 pb-4">
       <button className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-slate-500 hover:bg-slate-50 transition-colors shadow-sm border border-slate-100 font-bold text-xs">
@@ -346,7 +341,7 @@ function AddTicketModal({
   );
 }
 
-function SupportRouteComponent() {
+export default function SupportRouteComponent() {
   const queryClient = useQueryClient();
   const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(
     null,

@@ -1,15 +1,11 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useWalletTransactions } from "../../features/wallet/useWalletTransactions";
 import { TransactionsTabHeader } from "../../features/wallet/components/TransactionsTabHeader";
 import { TransactionsHistoryTable } from "../../features/wallet/components/TransactionsHistoryTable";
 import { TransactionsPagination } from "../../features/wallet/components/TransactionsPagination";
 
-export const Route = createLazyFileRoute("/_auth/transactions")({
-  component: TransactionsRouteComponent,
-});
 
-function TransactionsRouteComponent() {
+export default function TransactionsRouteComponent() {
   const [activeTab, setActiveTab] = useState<"commission" | "token">(
     "commission",
   );
