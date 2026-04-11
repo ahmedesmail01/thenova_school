@@ -230,7 +230,9 @@ export function Navbar() {
 
       {/* Mobile dropdown */}
       <div
-        className={`md:hidden absolute top-16 left-0 right-0 bg-brand-navy/95 border-b border-brand-border  transition-all duration-300 ${menuOpen ? "max-h-120 opacity-100" : "max-h-0 opacity-0"}`}
+        className={`md:hidden absolute top-16 left-0 right-0 bg-brand-navy/95 border-b border-brand-border transition-all duration-300 overflow-hidden ${
+          menuOpen ? "max-h-120 opacity-100 pointer-events-auto" : "max-h-0 opacity-0 pointer-events-none"
+        }`}
       >
         <div className="p-4 flex flex-col gap-2">
           <a

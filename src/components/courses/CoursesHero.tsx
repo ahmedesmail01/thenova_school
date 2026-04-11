@@ -50,6 +50,7 @@ const CoursesHero = ({ onSearch, initialSearch = "" }: CoursesHeroProps) => {
               className="w-full bg-transparent border-none focus:ring-0 px-8 text-[#1D2026] placeholder:text-[#999DA3] text-lg outline-none"
             />
             <button
+              type="button"
               onClick={handleSearch}
               className="h-full shrink-0 transition-opacity hover:opacity-90 "
             >
