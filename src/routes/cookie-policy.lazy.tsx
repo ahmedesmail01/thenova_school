@@ -128,7 +128,7 @@ function CookiePolicy() {
               <span className="text-white font-normal underline">
                 WhatsApp:
               </span>{" "}
-              +971 582 323 368
+              +971 55 456 2343
             </li>
             <li>
               <span className="text-white font-normal underline">Support:</span>{" "}

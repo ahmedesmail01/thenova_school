@@ -8,7 +8,7 @@ export const Route = createLazyFileRoute("/terms-and-conditions")({
 
 function TermsAndConditions() {
   const { isAuthenticated } = useAuthStore();
-  
+
   const sections = [
     {
       title: "Acceptance of Terms",
@@ -214,7 +214,7 @@ function TermsAndConditions() {
             </li>
             <li>
               <span className="text-brand-blue-light font-bold">WhatsApp:</span>{" "}
-              +971 582 323 368
+              +971 55 456 2343
             </li>
             <li>
               <span className="text-brand-blue-light font-bold">Support:</span>{" "}

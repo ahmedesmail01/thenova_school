@@ -67,22 +67,26 @@ export function Navbar() {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8 text-sm font-medium">
-          <a
-            href="https://test.thenovagroupco.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
-          >
-            Home
-          </a>
-          <a
-            href="https://test.thenovagroupco.com/packages"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
-          >
-            Packages
-          </a>
+          {!isAuthenticated && (
+            <a
+              href="https://thenovagroupco.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
+            >
+              Home
+            </a>
+          )}
+          {!isAuthenticated && (
+            <a
+              href="https://thenovagroupco.com/packages"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
+            >
+              Packages
+            </a>
+          )}
           <Link
             to="/courses"
             className="text-text-secondary hover:text-brand-blue-light transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
@@ -151,8 +155,10 @@ export function Navbar() {
                     <ChevronRight className="w-4 h-4 text-dash-muted opacity-0 group-hover:opacity-100 transition-all translate-x-[-4px] group-hover:translate-x-0" />
                   </Link>
 
-                  {/* <Link
-                    to="/dashboard"
+                  <a
+                    href="https://thenovagroupco.com/dashboard"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={() => setShowUserDropdown(false)}
                     className="group flex items-center justify-between w-full p-2.5 rounded-xl text-dash-text hover:bg-dash-bg transition-all mt-1"
                   >
@@ -165,7 +171,7 @@ export function Navbar() {
                       </span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-dash-muted opacity-0 group-hover:opacity-100 transition-all translate-x-[-4px] group-hover:translate-x-0" />
-                  </Link> */}
+                  </a>
 
                   <div className="h-px bg-dash-border/50 my-2 mx-2" />
 
@@ -231,28 +237,34 @@ export function Navbar() {
       {/* Mobile dropdown */}
       <div
         className={`md:hidden absolute top-16 left-0 right-0 bg-brand-navy/95 border-b border-brand-border transition-all duration-300 overflow-hidden ${
-          menuOpen ? "max-h-120 opacity-100 pointer-events-auto" : "max-h-0 opacity-0 pointer-events-none"
+          menuOpen
+            ? "max-h-120 opacity-100 pointer-events-auto"
+            : "max-h-0 opacity-0 pointer-events-none"
         }`}
       >
         <div className="p-4 flex flex-col gap-2">
-          <a
-            href="https://test.thenovagroupco.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMenuOpen(false)}
-            className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
-          >
-            Home
-          </a>
-          <a
-            href="https://test.thenovagroupco.com/packages"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setMenuOpen(false)}
-            className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
-          >
-            Packages
-          </a>
+          {!isAuthenticated && (
+            <a
+              href="https://thenovagroupco.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMenuOpen(false)}
+              className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
+            >
+              Home
+            </a>
+          )}
+          {!isAuthenticated && (
+            <a
+              href="https://thenovagroupco.com/packages"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMenuOpen(false)}
+              className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors [&.active]:text-brand-blue [&.active]:font-bold"
+            >
+              Packages
+            </a>
+          )}
           <Link
             to="/courses"
             onClick={() => setMenuOpen(false)}
@@ -260,25 +272,27 @@ export function Navbar() {
           >
             Courses
           </Link>
-          <Link
+          {/* <Link
             to="/about"
             onClick={() => setMenuOpen(false)}
             className="text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors"
           >
             About
-          </Link>
+          </Link> */}
           <hr className="border-brand-border my-1" />
           <div className="flex flex-col gap-2">
             {isAuthenticated ? (
               <>
-                <Link
-                  to="/dashboard"
+                <a
+                  href="https://thenovagroupco.com/dashboard"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={() => setMenuOpen(false)}
                   className="flex items-center gap-3 text-text-secondary hover:text-brand-blue-light p-3 rounded-lg hover:bg-white/5 transition-colors"
                 >
                   <LayoutDashboard className="w-5 h-5" />
                   <span className="font-medium">Dashboard</span>
-                </Link>
+                </a>
                 <Link
                   to="/profile"
                   onClick={() => setMenuOpen(false)}

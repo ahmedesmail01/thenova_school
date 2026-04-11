@@ -120,7 +120,7 @@ Maximum liability is limited to the amount paid.
     For any inquiries or support:
 
 Email: info@thenovagroupco.com  
-WhatsApp: +971 582 323 368  
+WhatsApp: +971 55 456 2343  
 Support: Ticket system
 
 PRIVACY POLICY
@@ -255,7 +255,7 @@ Updates will be posted on this page with the effective date.
 For any questions or requests:
 
 Email: info@thenovagroupco.com  
-WhatsApp: +971 582 323 368  
+WhatsApp: +971 55 456 2343  
 Support: Ticket system
 
 "}
@@ -351,7 +351,7 @@ By using our website or Services, you confirm that you have read, understood, an
 For any inquiries:
 
 Email: info@thenovagroupco.com  
-WhatsApp: +971 582 323 368  
+WhatsApp: +971 55 456 2343  
 Support: Ticket system
 
 COOKIE POLICY
@@ -432,5 +432,5 @@ Any changes will be posted on this page with the updated date.
 For any questions:
 
 Email: info@thenovagroupco.com  
-WhatsApp: +971 582 323 368  
+WhatsApp: +971 55 456 2343  
 Support: Ticket system

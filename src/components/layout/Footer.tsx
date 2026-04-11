@@ -102,7 +102,7 @@ export function Footer() {
                 <span className="mt-0.5 ">
                   <img src={phoneIcon} alt="" className="w-4" />
                 </span>
-                <span>+971 582 323 368</span>
+                <span>+971 55 456 2343</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="mt-0.5 ">
