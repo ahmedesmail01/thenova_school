@@ -248,8 +248,8 @@ function ProfileRouteComponent() {
                     course={course}
                     onClick={() =>
                       navigate({
-                        to: "/courses/$courseId",
-                        params: { courseId: course.id.toString() },
+                        to: "/courses/$slug",
+                        params: { slug: course.slug },
                       })
                     }
                   />
@@ -259,7 +259,7 @@ function ProfileRouteComponent() {
               <EmptyState />
             )}
           </ContentCard>
-
+ 
           {/* Completed Courses */}
           <ContentCard title="Completed Courses" icon={FileText}>
             {completedCourses.length > 0 ? (
@@ -271,8 +271,8 @@ function ProfileRouteComponent() {
                     showCompleted
                     onClick={() =>
                       navigate({
-                        to: "/courses/$courseId",
-                        params: { courseId: course.id.toString() },
+                        to: "/courses/$slug",
+                        params: { slug: course.slug },
                       })
                     }
                   />

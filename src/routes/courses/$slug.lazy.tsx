@@ -10,14 +10,14 @@ import { Button } from "../../components/ui/Button";
 import toast from "react-hot-toast";
 import OtherCourses from "../../features/courses/OtherCourses";
 
-export const Route = createLazyFileRoute("/courses/$courseId")({
+export const Route = createLazyFileRoute("/courses/$slug")({
   component: CourseDetailPage,
 });
 
 function CourseDetailPage() {
-  const { courseId } = Route.useParams();
+  const { slug } = Route.useParams();
   const navigate = useNavigate();
-  const { data: course, isLoading } = useCourse(courseId);
+  const { data: course, isLoading } = useCourse(slug);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const { data: enrollmentsData } = useUserEnrollments();
   const enrollMutation = useEnrollInCourse();
