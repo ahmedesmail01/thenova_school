@@ -1,7 +1,18 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../lib/api";
 
-// ─── Raw API Types ───────────────────────────────────────────
+export interface RawSubcategory {
+  id: number;
+  category_id?: number;
+  name: string;
+  slug: string;
+  description: string;
+  image: string;
+  status: number;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface RawCategory {
   id: number;
   name: string;
@@ -9,6 +20,22 @@ export interface RawCategory {
   description: string;
   image: string;
   status: number;
+  created_at: string;
+  updated_at: string;
+  subcategories?: RawSubcategory[];
+}
+
+export interface RawPackage {
+  id: number;
+  name: string;
+  price: string;
+  level: string | null;
+  billing_period: string;
+  cv: number;
+  features: Record<string, boolean>;
+  pack_card: string;
+  pack_icon: string;
+  is_published: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -130,9 +157,11 @@ export interface EnrolledSection extends RawSection {
 export interface CourseFiltersType {
   category_id?: (string | number)[];
   category_slug?: string[];
+  subcategory_slug?: string[];
   skills?: (string | number)[];
   level?: (string | number)[];
   package_level?: (string | number)[];
+  package_id?: (string | number)[];
   duration_min?: number;
   duration_max?: number;
   search?: string;
@@ -141,9 +170,25 @@ export interface CourseFiltersType {
   sort_order?: "asc" | "desc";
 }
 
+export interface Skill {
+  id: number;
+  name: string;
+  description: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CourseLevel {
+  value: number;
+  label: string;
+}
+
 export interface FilterDataResponse {
   categories: RawCategory[];
-  skills: any[];
+  subcategories: RawSubcategory[];
+  skills: Skill[];
+  levels: CourseLevel[];
+  packages: RawPackage[];
 }
 
 // ─── Utility ──────────────────────────────────────────────────

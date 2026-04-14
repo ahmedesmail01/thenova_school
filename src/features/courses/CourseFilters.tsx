@@ -4,6 +4,9 @@ import {
 } from "../../features/courses/courseQueries";
 import { FilterSection } from "./components/filters/FilterSection";
 import { CategoryFilter } from "./components/filters/CategoryFilter";
+import { PackageFilter } from "./components/filters/PackageFilter";
+import { LevelFilter } from "./components/filters/LevelFilter";
+import { SkillFilter } from "./components/filters/SkillFilter";
 
 interface CourseFiltersProps {
   filters: CourseFiltersType;
@@ -33,17 +36,55 @@ export function CourseFilters({ filters, onChange }: CourseFiltersProps) {
   }
 
   const categories = filterData?.categories || [];
+  const levelData = filterData?.levels || [];
+  const skillData = filterData?.skills || [];
+  const packages = filterData?.packages || [];
 
   return (
-    <div className="flex flex-col gap-0 border border-[#E9EAF0]">
+    <div className="flex flex-col gap-0 border max-h-[calc(95vh-100px)] overflow-y-auto border-[#E9EAF0] no-scrollbar">
       {/* Category Section */}
       <FilterSection title="Category" isOpen={true}>
         <CategoryFilter
           categories={categories}
           selectedSlugs={filters.category_slug || []}
+          selectedSubcategorySlugs={filters.subcategory_slug || []}
           onToggle={(slug) => handleToggle("category_slug", slug)}
+          onToggleSubcategory={(slug) => handleToggle("subcategory_slug", slug)}
         />
       </FilterSection>
+
+      {/* Level Section */}
+      {levelData.length > 0 && (
+        <FilterSection title="Level" isOpen={true}>
+          <LevelFilter
+            levels={levelData}
+            selectedValues={filters.level || []}
+            onToggle={(val) => handleToggle("level", val)}
+          />
+        </FilterSection>
+      )}
+
+      {/* Skills Section */}
+      {skillData.length > 0 && (
+        <FilterSection title="Skills" isOpen={true}>
+          <SkillFilter
+            skills={skillData}
+            selectedIds={filters.skills || []}
+            onToggle={(id) => handleToggle("skills", id)}
+          />
+        </FilterSection>
+      )}
+
+      {/* Package Section */}
+      {packages.length > 0 && (
+        <FilterSection title="Packages" isOpen={false}>
+          <PackageFilter
+            packages={packages}
+            selectedIds={filters.package_id || []}
+            onToggle={(id) => handleToggle("package_id", id)}
+          />
+        </FilterSection>
+      )}
     </div>
   );
 }

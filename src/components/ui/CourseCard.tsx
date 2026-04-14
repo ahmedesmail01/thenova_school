@@ -1,4 +1,7 @@
-import { type RawCourse, formatDuration } from "../../features/courses/courseQueries";
+import {
+  type RawCourse,
+  formatDuration,
+} from "../../features/courses/courseQueries";
 import { Clock } from "lucide-react";
 
 interface CourseCardProps {
@@ -15,7 +18,7 @@ export function CourseCard({
   isLibraryView = false,
 }: CourseCardProps) {
   return (
-    <div className="bg-white rounded-[1rem] p-3 border border-[#E9EAF0] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group">
+    <div className="bg-white  rounded-[1rem] p-3 border border-[#E9EAF0] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col group">
       {/* Thumbnail Area */}
       <div className="relative rounded-2xl overflow-hidden aspect-[1.8/1] mb-4">
         <img
@@ -74,26 +77,26 @@ export function CourseCard({
           {/* Actions */}
           {!isLibraryView ? (
             <div className="grid grid-cols-2 gap-3 mb-4 mx-2">
-          <button
-            onClick={() => onViewDetails?.(course.slug)}
-            className="py-3 px-4 bg-[#E8F1F8] text-[#458FCE] font-bold text-sm hover:bg-[#D1E5F3] transition-colors rounded-sm"
-          >
-            View Details
-          </button>
-          <button
-            onClick={() => onPackage?.(course.slug)}
-            className="py-3 px-4 bg-[#458FCE] text-white font-bold text-sm hover:bg-[#2563EB] transition-colors shadow-lg shadow-blue-500/20 rounded-sm"
-          >
-            Package
-          </button>
+              <button
+                onClick={() => onViewDetails?.(course.slug)}
+                className="py-3 px-4 bg-[#E8F1F8] text-[#458FCE] font-bold text-sm hover:bg-[#D1E5F3] transition-colors rounded-sm"
+              >
+                View Details
+              </button>
+              <button
+                onClick={() => onPackage?.(course.slug)}
+                className="py-3 px-4 bg-[#458FCE] text-white font-bold text-sm hover:bg-[#2563EB] transition-colors shadow-lg shadow-blue-500/20 rounded-sm"
+              >
+                Package
+              </button>
             </div>
           ) : (
-        <button
-          onClick={() => onViewDetails?.(course.slug)}
-          className="w-full py-3 px-4  bg-[#3B82F6] text-white font-bold text-sm hover:bg-[#2563EB] transition-colors shadow-lg shadow-blue-500/20"
-        >
-          Continue Learning →
-        </button>
+            <button
+              onClick={() => onViewDetails?.(course.slug)}
+              className="w-full py-3 px-4  bg-[#3B82F6] text-white font-bold text-sm hover:bg-[#2563EB] transition-colors shadow-lg shadow-blue-500/20"
+            >
+              Continue Learning →
+            </button>
           )}
         </div>
       </div>

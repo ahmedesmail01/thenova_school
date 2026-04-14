@@ -18,28 +18,15 @@ const TermsAndConditionsLazyRouteImport = createFileRoute(
 )()
 const RegisterLazyRouteImport = createFileRoute('/register')()
 const PrivacyPolicyLazyRouteImport = createFileRoute('/privacy-policy')()
-const PlayerLazyRouteImport = createFileRoute('/player')()
-const PackagesLazyRouteImport = createFileRoute('/packages')()
 const LoginLazyRouteImport = createFileRoute('/login')()
 const ForgotPasswordLazyRouteImport = createFileRoute('/forgot-password')()
 const DisclaimerLazyRouteImport = createFileRoute('/disclaimer')()
 const CookiePolicyLazyRouteImport = createFileRoute('/cookie-policy')()
-const AboutLazyRouteImport = createFileRoute('/about')()
 const IndexLazyRouteImport = createFileRoute('/')()
 const CoursesIndexLazyRouteImport = createFileRoute('/courses/')()
 const CoursesCourseIdLazyRouteImport = createFileRoute('/courses/$courseId')()
-const AuthWalletLazyRouteImport = createFileRoute('/_auth/wallet')()
-const AuthTransactionsLazyRouteImport = createFileRoute('/_auth/transactions')()
-const AuthTankLazyRouteImport = createFileRoute('/_auth/tank')()
-const AuthSupportLazyRouteImport = createFileRoute('/_auth/support')()
-const AuthRankRewardLazyRouteImport = createFileRoute('/_auth/rank-reward')()
 const AuthProfileLazyRouteImport = createFileRoute('/_auth/profile')()
-const AuthNovaProLazyRouteImport = createFileRoute('/_auth/nova-pro')()
-const AuthMembershipLazyRouteImport = createFileRoute('/_auth/membership')()
-const AuthLibraryLazyRouteImport = createFileRoute('/_auth/library')()
-const AuthGenealogyLazyRouteImport = createFileRoute('/_auth/genealogy')()
-const AuthDashboardLazyRouteImport = createFileRoute('/_auth/dashboard')()
-const AuthCommissionsLazyRouteImport = createFileRoute('/_auth/commissions')()
+const AuthPlayerLazyRouteImport = createFileRoute('/_auth/player')()
 
 const TermsAndConditionsLazyRoute = TermsAndConditionsLazyRouteImport.update({
   id: '/terms-and-conditions',
@@ -60,16 +47,6 @@ const PrivacyPolicyLazyRoute = PrivacyPolicyLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/privacy-policy.lazy').then((d) => d.Route),
 )
-const PlayerLazyRoute = PlayerLazyRouteImport.update({
-  id: '/player',
-  path: '/player',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/player.lazy').then((d) => d.Route))
-const PackagesLazyRoute = PackagesLazyRouteImport.update({
-  id: '/packages',
-  path: '/packages',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/packages.lazy').then((d) => d.Route))
 const LoginLazyRoute = LoginLazyRouteImport.update({
   id: '/login',
   path: '/login',
@@ -92,11 +69,6 @@ const CookiePolicyLazyRoute = CookiePolicyLazyRouteImport.update({
   path: '/cookie-policy',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/cookie-policy.lazy').then((d) => d.Route))
-const AboutLazyRoute = AboutLazyRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
@@ -118,132 +90,42 @@ const CoursesCourseIdLazyRoute = CoursesCourseIdLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/courses/$courseId.lazy').then((d) => d.Route),
 )
-const AuthWalletLazyRoute = AuthWalletLazyRouteImport.update({
-  id: '/wallet',
-  path: '/wallet',
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() => import('./routes/_auth/wallet.lazy').then((d) => d.Route))
-const AuthTransactionsLazyRoute = AuthTransactionsLazyRouteImport.update({
-  id: '/transactions',
-  path: '/transactions',
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() =>
-  import('./routes/_auth/transactions.lazy').then((d) => d.Route),
-)
-const AuthTankLazyRoute = AuthTankLazyRouteImport.update({
-  id: '/tank',
-  path: '/tank',
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() => import('./routes/_auth/tank.lazy').then((d) => d.Route))
-const AuthSupportLazyRoute = AuthSupportLazyRouteImport.update({
-  id: '/support',
-  path: '/support',
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() => import('./routes/_auth/support.lazy').then((d) => d.Route))
-const AuthRankRewardLazyRoute = AuthRankRewardLazyRouteImport.update({
-  id: '/rank-reward',
-  path: '/rank-reward',
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() =>
-  import('./routes/_auth/rank-reward.lazy').then((d) => d.Route),
-)
 const AuthProfileLazyRoute = AuthProfileLazyRouteImport.update({
   id: '/profile',
   path: '/profile',
   getParentRoute: () => AuthRoute,
 } as any).lazy(() => import('./routes/_auth/profile.lazy').then((d) => d.Route))
-const AuthNovaProLazyRoute = AuthNovaProLazyRouteImport.update({
-  id: '/nova-pro',
-  path: '/nova-pro',
+const AuthPlayerLazyRoute = AuthPlayerLazyRouteImport.update({
+  id: '/player',
+  path: '/player',
   getParentRoute: () => AuthRoute,
-} as any).lazy(() =>
-  import('./routes/_auth/nova-pro.lazy').then((d) => d.Route),
-)
-const AuthMembershipLazyRoute = AuthMembershipLazyRouteImport.update({
-  id: '/membership',
-  path: '/membership',
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() =>
-  import('./routes/_auth/membership.lazy').then((d) => d.Route),
-)
-const AuthLibraryLazyRoute = AuthLibraryLazyRouteImport.update({
-  id: '/library',
-  path: '/library',
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() => import('./routes/_auth/library.lazy').then((d) => d.Route))
-const AuthGenealogyLazyRoute = AuthGenealogyLazyRouteImport.update({
-  id: '/genealogy',
-  path: '/genealogy',
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() =>
-  import('./routes/_auth/genealogy.lazy').then((d) => d.Route),
-)
-const AuthDashboardLazyRoute = AuthDashboardLazyRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() =>
-  import('./routes/_auth/dashboard.lazy').then((d) => d.Route),
-)
-const AuthCommissionsLazyRoute = AuthCommissionsLazyRouteImport.update({
-  id: '/commissions',
-  path: '/commissions',
-  getParentRoute: () => AuthRoute,
-} as any).lazy(() =>
-  import('./routes/_auth/commissions.lazy').then((d) => d.Route),
-)
+} as any).lazy(() => import('./routes/_auth/player.lazy').then((d) => d.Route))
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
-  '/about': typeof AboutLazyRoute
   '/cookie-policy': typeof CookiePolicyLazyRoute
   '/disclaimer': typeof DisclaimerLazyRoute
   '/forgot-password': typeof ForgotPasswordLazyRoute
   '/login': typeof LoginLazyRoute
-  '/packages': typeof PackagesLazyRoute
-  '/player': typeof PlayerLazyRoute
   '/privacy-policy': typeof PrivacyPolicyLazyRoute
   '/register': typeof RegisterLazyRoute
   '/terms-and-conditions': typeof TermsAndConditionsLazyRoute
-  '/commissions': typeof AuthCommissionsLazyRoute
-  '/dashboard': typeof AuthDashboardLazyRoute
-  '/genealogy': typeof AuthGenealogyLazyRoute
-  '/library': typeof AuthLibraryLazyRoute
-  '/membership': typeof AuthMembershipLazyRoute
-  '/nova-pro': typeof AuthNovaProLazyRoute
+  '/player': typeof AuthPlayerLazyRoute
   '/profile': typeof AuthProfileLazyRoute
-  '/rank-reward': typeof AuthRankRewardLazyRoute
-  '/support': typeof AuthSupportLazyRoute
-  '/tank': typeof AuthTankLazyRoute
-  '/transactions': typeof AuthTransactionsLazyRoute
-  '/wallet': typeof AuthWalletLazyRoute
   '/courses/$courseId': typeof CoursesCourseIdLazyRoute
   '/courses/': typeof CoursesIndexLazyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
-  '/about': typeof AboutLazyRoute
   '/cookie-policy': typeof CookiePolicyLazyRoute
   '/disclaimer': typeof DisclaimerLazyRoute
   '/forgot-password': typeof ForgotPasswordLazyRoute
   '/login': typeof LoginLazyRoute
-  '/packages': typeof PackagesLazyRoute
-  '/player': typeof PlayerLazyRoute
   '/privacy-policy': typeof PrivacyPolicyLazyRoute
   '/register': typeof RegisterLazyRoute
   '/terms-and-conditions': typeof TermsAndConditionsLazyRoute
-  '/commissions': typeof AuthCommissionsLazyRoute
-  '/dashboard': typeof AuthDashboardLazyRoute
-  '/genealogy': typeof AuthGenealogyLazyRoute
-  '/library': typeof AuthLibraryLazyRoute
-  '/membership': typeof AuthMembershipLazyRoute
-  '/nova-pro': typeof AuthNovaProLazyRoute
+  '/player': typeof AuthPlayerLazyRoute
   '/profile': typeof AuthProfileLazyRoute
-  '/rank-reward': typeof AuthRankRewardLazyRoute
-  '/support': typeof AuthSupportLazyRoute
-  '/tank': typeof AuthTankLazyRoute
-  '/transactions': typeof AuthTransactionsLazyRoute
-  '/wallet': typeof AuthWalletLazyRoute
   '/courses/$courseId': typeof CoursesCourseIdLazyRoute
   '/courses': typeof CoursesIndexLazyRoute
 }
@@ -251,28 +133,15 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexLazyRoute
   '/_auth': typeof AuthRouteWithChildren
-  '/about': typeof AboutLazyRoute
   '/cookie-policy': typeof CookiePolicyLazyRoute
   '/disclaimer': typeof DisclaimerLazyRoute
   '/forgot-password': typeof ForgotPasswordLazyRoute
   '/login': typeof LoginLazyRoute
-  '/packages': typeof PackagesLazyRoute
-  '/player': typeof PlayerLazyRoute
   '/privacy-policy': typeof PrivacyPolicyLazyRoute
   '/register': typeof RegisterLazyRoute
   '/terms-and-conditions': typeof TermsAndConditionsLazyRoute
-  '/_auth/commissions': typeof AuthCommissionsLazyRoute
-  '/_auth/dashboard': typeof AuthDashboardLazyRoute
-  '/_auth/genealogy': typeof AuthGenealogyLazyRoute
-  '/_auth/library': typeof AuthLibraryLazyRoute
-  '/_auth/membership': typeof AuthMembershipLazyRoute
-  '/_auth/nova-pro': typeof AuthNovaProLazyRoute
+  '/_auth/player': typeof AuthPlayerLazyRoute
   '/_auth/profile': typeof AuthProfileLazyRoute
-  '/_auth/rank-reward': typeof AuthRankRewardLazyRoute
-  '/_auth/support': typeof AuthSupportLazyRoute
-  '/_auth/tank': typeof AuthTankLazyRoute
-  '/_auth/transactions': typeof AuthTransactionsLazyRoute
-  '/_auth/wallet': typeof AuthWalletLazyRoute
   '/courses/$courseId': typeof CoursesCourseIdLazyRoute
   '/courses/': typeof CoursesIndexLazyRoute
 }
@@ -280,83 +149,44 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/about'
     | '/cookie-policy'
     | '/disclaimer'
     | '/forgot-password'
     | '/login'
-    | '/packages'
-    | '/player'
     | '/privacy-policy'
     | '/register'
     | '/terms-and-conditions'
-    | '/commissions'
-    | '/dashboard'
-    | '/genealogy'
-    | '/library'
-    | '/membership'
-    | '/nova-pro'
+    | '/player'
     | '/profile'
-    | '/rank-reward'
-    | '/support'
-    | '/tank'
-    | '/transactions'
-    | '/wallet'
     | '/courses/$courseId'
     | '/courses/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/about'
     | '/cookie-policy'
     | '/disclaimer'
     | '/forgot-password'
     | '/login'
-    | '/packages'
-    | '/player'
     | '/privacy-policy'
     | '/register'
     | '/terms-and-conditions'
-    | '/commissions'
-    | '/dashboard'
-    | '/genealogy'
-    | '/library'
-    | '/membership'
-    | '/nova-pro'
+    | '/player'
     | '/profile'
-    | '/rank-reward'
-    | '/support'
-    | '/tank'
-    | '/transactions'
-    | '/wallet'
     | '/courses/$courseId'
     | '/courses'
   id:
     | '__root__'
     | '/'
     | '/_auth'
-    | '/about'
     | '/cookie-policy'
     | '/disclaimer'
     | '/forgot-password'
     | '/login'
-    | '/packages'
-    | '/player'
     | '/privacy-policy'
     | '/register'
     | '/terms-and-conditions'
-    | '/_auth/commissions'
-    | '/_auth/dashboard'
-    | '/_auth/genealogy'
-    | '/_auth/library'
-    | '/_auth/membership'
-    | '/_auth/nova-pro'
+    | '/_auth/player'
     | '/_auth/profile'
-    | '/_auth/rank-reward'
-    | '/_auth/support'
-    | '/_auth/tank'
-    | '/_auth/transactions'
-    | '/_auth/wallet'
     | '/courses/$courseId'
     | '/courses/'
   fileRoutesById: FileRoutesById
@@ -364,13 +194,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   AuthRoute: typeof AuthRouteWithChildren
-  AboutLazyRoute: typeof AboutLazyRoute
   CookiePolicyLazyRoute: typeof CookiePolicyLazyRoute
   DisclaimerLazyRoute: typeof DisclaimerLazyRoute
   ForgotPasswordLazyRoute: typeof ForgotPasswordLazyRoute
   LoginLazyRoute: typeof LoginLazyRoute
-  PackagesLazyRoute: typeof PackagesLazyRoute
-  PlayerLazyRoute: typeof PlayerLazyRoute
   PrivacyPolicyLazyRoute: typeof PrivacyPolicyLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
   TermsAndConditionsLazyRoute: typeof TermsAndConditionsLazyRoute
@@ -401,20 +228,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyPolicyLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/player': {
-      id: '/player'
-      path: '/player'
-      fullPath: '/player'
-      preLoaderRoute: typeof PlayerLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/packages': {
-      id: '/packages'
-      path: '/packages'
-      fullPath: '/packages'
-      preLoaderRoute: typeof PackagesLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -441,13 +254,6 @@ declare module '@tanstack/react-router' {
       path: '/cookie-policy'
       fullPath: '/cookie-policy'
       preLoaderRoute: typeof CookiePolicyLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
@@ -478,41 +284,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesCourseIdLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_auth/wallet': {
-      id: '/_auth/wallet'
-      path: '/wallet'
-      fullPath: '/wallet'
-      preLoaderRoute: typeof AuthWalletLazyRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/transactions': {
-      id: '/_auth/transactions'
-      path: '/transactions'
-      fullPath: '/transactions'
-      preLoaderRoute: typeof AuthTransactionsLazyRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/tank': {
-      id: '/_auth/tank'
-      path: '/tank'
-      fullPath: '/tank'
-      preLoaderRoute: typeof AuthTankLazyRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/support': {
-      id: '/_auth/support'
-      path: '/support'
-      fullPath: '/support'
-      preLoaderRoute: typeof AuthSupportLazyRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/rank-reward': {
-      id: '/_auth/rank-reward'
-      path: '/rank-reward'
-      fullPath: '/rank-reward'
-      preLoaderRoute: typeof AuthRankRewardLazyRouteImport
-      parentRoute: typeof AuthRoute
-    }
     '/_auth/profile': {
       id: '/_auth/profile'
       path: '/profile'
@@ -520,79 +291,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthProfileLazyRouteImport
       parentRoute: typeof AuthRoute
     }
-    '/_auth/nova-pro': {
-      id: '/_auth/nova-pro'
-      path: '/nova-pro'
-      fullPath: '/nova-pro'
-      preLoaderRoute: typeof AuthNovaProLazyRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/membership': {
-      id: '/_auth/membership'
-      path: '/membership'
-      fullPath: '/membership'
-      preLoaderRoute: typeof AuthMembershipLazyRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/library': {
-      id: '/_auth/library'
-      path: '/library'
-      fullPath: '/library'
-      preLoaderRoute: typeof AuthLibraryLazyRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/genealogy': {
-      id: '/_auth/genealogy'
-      path: '/genealogy'
-      fullPath: '/genealogy'
-      preLoaderRoute: typeof AuthGenealogyLazyRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/dashboard': {
-      id: '/_auth/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthDashboardLazyRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/_auth/commissions': {
-      id: '/_auth/commissions'
-      path: '/commissions'
-      fullPath: '/commissions'
-      preLoaderRoute: typeof AuthCommissionsLazyRouteImport
+    '/_auth/player': {
+      id: '/_auth/player'
+      path: '/player'
+      fullPath: '/player'
+      preLoaderRoute: typeof AuthPlayerLazyRouteImport
       parentRoute: typeof AuthRoute
     }
   }
 }
 
 interface AuthRouteChildren {
-  AuthCommissionsLazyRoute: typeof AuthCommissionsLazyRoute
-  AuthDashboardLazyRoute: typeof AuthDashboardLazyRoute
-  AuthGenealogyLazyRoute: typeof AuthGenealogyLazyRoute
-  AuthLibraryLazyRoute: typeof AuthLibraryLazyRoute
-  AuthMembershipLazyRoute: typeof AuthMembershipLazyRoute
-  AuthNovaProLazyRoute: typeof AuthNovaProLazyRoute
+  AuthPlayerLazyRoute: typeof AuthPlayerLazyRoute
   AuthProfileLazyRoute: typeof AuthProfileLazyRoute
-  AuthRankRewardLazyRoute: typeof AuthRankRewardLazyRoute
-  AuthSupportLazyRoute: typeof AuthSupportLazyRoute
-  AuthTankLazyRoute: typeof AuthTankLazyRoute
-  AuthTransactionsLazyRoute: typeof AuthTransactionsLazyRoute
-  AuthWalletLazyRoute: typeof AuthWalletLazyRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthCommissionsLazyRoute: AuthCommissionsLazyRoute,
-  AuthDashboardLazyRoute: AuthDashboardLazyRoute,
-  AuthGenealogyLazyRoute: AuthGenealogyLazyRoute,
-  AuthLibraryLazyRoute: AuthLibraryLazyRoute,
-  AuthMembershipLazyRoute: AuthMembershipLazyRoute,
-  AuthNovaProLazyRoute: AuthNovaProLazyRoute,
+  AuthPlayerLazyRoute: AuthPlayerLazyRoute,
   AuthProfileLazyRoute: AuthProfileLazyRoute,
-  AuthRankRewardLazyRoute: AuthRankRewardLazyRoute,
-  AuthSupportLazyRoute: AuthSupportLazyRoute,
-  AuthTankLazyRoute: AuthTankLazyRoute,
-  AuthTransactionsLazyRoute: AuthTransactionsLazyRoute,
-  AuthWalletLazyRoute: AuthWalletLazyRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
@@ -600,13 +316,10 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   AuthRoute: AuthRouteWithChildren,
-  AboutLazyRoute: AboutLazyRoute,
   CookiePolicyLazyRoute: CookiePolicyLazyRoute,
   DisclaimerLazyRoute: DisclaimerLazyRoute,
   ForgotPasswordLazyRoute: ForgotPasswordLazyRoute,
   LoginLazyRoute: LoginLazyRoute,
-  PackagesLazyRoute: PackagesLazyRoute,
-  PlayerLazyRoute: PlayerLazyRoute,
   PrivacyPolicyLazyRoute: PrivacyPolicyLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
   TermsAndConditionsLazyRoute: TermsAndConditionsLazyRoute,
