@@ -285,11 +285,22 @@ export const useDownline = (userId?: number | string) => {
 export interface RecentCourse {
   id: number;
   title: string;
+  slug: string;
   level: number;
   duration: number;
   progress: number;
   thumbnail: string;
   instructor: string | null;
+  subcategory?: {
+    id: number;
+    name: string;
+    slug: string;
+  };
+  category?: {
+    id: number;
+    name: string;
+    slug: string;
+  };
   status: "not_started" | "in_progress" | "completed";
   created_at: string;
   last_accessed_at: string;

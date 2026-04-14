@@ -66,16 +66,16 @@ const OtherCourses = ({
           >
             <CourseCard
               course={c}
-              onViewDetails={(id) =>
+              onViewDetails={(slug) =>
                 navigate({
-                  to: "/courses/$courseId",
-                  params: { courseId: id },
+                  to: "/courses/$slug",
+                  params: { slug: slug },
                 })
               }
-              onPackage={(id) =>
+              onPackage={(slug) =>
                 navigate({
-                  to: "/courses/$courseId",
-                  params: { courseId: id },
+                  to: "/courses/$slug",
+                  params: { slug: slug },
                 })
               }
             />

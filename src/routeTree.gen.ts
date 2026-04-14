@@ -24,7 +24,7 @@ const DisclaimerLazyRouteImport = createFileRoute('/disclaimer')()
 const CookiePolicyLazyRouteImport = createFileRoute('/cookie-policy')()
 const IndexLazyRouteImport = createFileRoute('/')()
 const CoursesIndexLazyRouteImport = createFileRoute('/courses/')()
-const CoursesCourseIdLazyRouteImport = createFileRoute('/courses/$courseId')()
+const CoursesSlugLazyRouteImport = createFileRoute('/courses/$slug')()
 const AuthProfileLazyRouteImport = createFileRoute('/_auth/profile')()
 const AuthPlayerLazyRouteImport = createFileRoute('/_auth/player')()
 
@@ -83,13 +83,11 @@ const CoursesIndexLazyRoute = CoursesIndexLazyRouteImport.update({
   path: '/courses/',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/courses/index.lazy').then((d) => d.Route))
-const CoursesCourseIdLazyRoute = CoursesCourseIdLazyRouteImport.update({
-  id: '/courses/$courseId',
-  path: '/courses/$courseId',
+const CoursesSlugLazyRoute = CoursesSlugLazyRouteImport.update({
+  id: '/courses/$slug',
+  path: '/courses/$slug',
   getParentRoute: () => rootRouteImport,
-} as any).lazy(() =>
-  import('./routes/courses/$courseId.lazy').then((d) => d.Route),
-)
+} as any).lazy(() => import('./routes/courses/$slug.lazy').then((d) => d.Route))
 const AuthProfileLazyRoute = AuthProfileLazyRouteImport.update({
   id: '/profile',
   path: '/profile',
@@ -112,7 +110,7 @@ export interface FileRoutesByFullPath {
   '/terms-and-conditions': typeof TermsAndConditionsLazyRoute
   '/player': typeof AuthPlayerLazyRoute
   '/profile': typeof AuthProfileLazyRoute
-  '/courses/$courseId': typeof CoursesCourseIdLazyRoute
+  '/courses/$slug': typeof CoursesSlugLazyRoute
   '/courses/': typeof CoursesIndexLazyRoute
 }
 export interface FileRoutesByTo {
@@ -126,7 +124,7 @@ export interface FileRoutesByTo {
   '/terms-and-conditions': typeof TermsAndConditionsLazyRoute
   '/player': typeof AuthPlayerLazyRoute
   '/profile': typeof AuthProfileLazyRoute
-  '/courses/$courseId': typeof CoursesCourseIdLazyRoute
+  '/courses/$slug': typeof CoursesSlugLazyRoute
   '/courses': typeof CoursesIndexLazyRoute
 }
 export interface FileRoutesById {
@@ -142,7 +140,7 @@ export interface FileRoutesById {
   '/terms-and-conditions': typeof TermsAndConditionsLazyRoute
   '/_auth/player': typeof AuthPlayerLazyRoute
   '/_auth/profile': typeof AuthProfileLazyRoute
-  '/courses/$courseId': typeof CoursesCourseIdLazyRoute
+  '/courses/$slug': typeof CoursesSlugLazyRoute
   '/courses/': typeof CoursesIndexLazyRoute
 }
 export interface FileRouteTypes {
@@ -158,7 +156,7 @@ export interface FileRouteTypes {
     | '/terms-and-conditions'
     | '/player'
     | '/profile'
-    | '/courses/$courseId'
+    | '/courses/$slug'
     | '/courses/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -172,7 +170,7 @@ export interface FileRouteTypes {
     | '/terms-and-conditions'
     | '/player'
     | '/profile'
-    | '/courses/$courseId'
+    | '/courses/$slug'
     | '/courses'
   id:
     | '__root__'
@@ -187,7 +185,7 @@ export interface FileRouteTypes {
     | '/terms-and-conditions'
     | '/_auth/player'
     | '/_auth/profile'
-    | '/courses/$courseId'
+    | '/courses/$slug'
     | '/courses/'
   fileRoutesById: FileRoutesById
 }
@@ -201,7 +199,7 @@ export interface RootRouteChildren {
   PrivacyPolicyLazyRoute: typeof PrivacyPolicyLazyRoute
   RegisterLazyRoute: typeof RegisterLazyRoute
   TermsAndConditionsLazyRoute: typeof TermsAndConditionsLazyRoute
-  CoursesCourseIdLazyRoute: typeof CoursesCourseIdLazyRoute
+  CoursesSlugLazyRoute: typeof CoursesSlugLazyRoute
   CoursesIndexLazyRoute: typeof CoursesIndexLazyRoute
 }
 
@@ -277,11 +275,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesIndexLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/courses/$courseId': {
-      id: '/courses/$courseId'
-      path: '/courses/$courseId'
-      fullPath: '/courses/$courseId'
-      preLoaderRoute: typeof CoursesCourseIdLazyRouteImport
+    '/courses/$slug': {
+      id: '/courses/$slug'
+      path: '/courses/$slug'
+      fullPath: '/courses/$slug'
+      preLoaderRoute: typeof CoursesSlugLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/profile': {
@@ -323,7 +321,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyPolicyLazyRoute: PrivacyPolicyLazyRoute,
   RegisterLazyRoute: RegisterLazyRoute,
   TermsAndConditionsLazyRoute: TermsAndConditionsLazyRoute,
-  CoursesCourseIdLazyRoute: CoursesCourseIdLazyRoute,
+  CoursesSlugLazyRoute: CoursesSlugLazyRoute,
   CoursesIndexLazyRoute: CoursesIndexLazyRoute,
 }
 export const routeTree = rootRouteImport

@@ -117,14 +117,14 @@ function CoursesPage() {
                       course={course}
                       onViewDetails={(slug) =>
                         navigate({
-                          to: "/courses/$courseId",
-                          params: { courseId: slug },
+                          to: "/courses/$slug",
+                          params: { slug },
                         })
                       }
                       onPackage={(slug) =>
                         navigate({
-                          to: "/courses/$courseId",
-                          params: { courseId: slug },
+                          to: "/courses/$slug",
+                          params: { slug },
                         })
                       }
                     />
