@@ -11,6 +11,7 @@ export interface RawSubcategory {
   status: number;
   created_at: string;
   updated_at: string;
+  total_courses?: number;
 }
 
 export interface RawCategory {
@@ -23,6 +24,7 @@ export interface RawCategory {
   created_at: string;
   updated_at: string;
   subcategories?: RawSubcategory[];
+  total_courses?: number;
 }
 
 export interface RawPackage {
@@ -165,6 +167,7 @@ export interface CourseFiltersType {
   duration_min?: number;
   duration_max?: number;
   search?: string;
+  title?: string;
   is_published?: boolean;
   sort_by?: string;
   sort_order?: "asc" | "desc";

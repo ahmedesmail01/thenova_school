@@ -18,7 +18,7 @@ export function FilterSection({
   const [isOpen, setIsOpen] = useState(initialOpen);
 
   return (
-    <div className={cn("border-b border-[#E9EAF0]", className)}>
+    <div className={cn("bg-white border border-[#E9EAF0] rounded-lg overflow-hidden shrink-0", className)}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between p-4 uppercase font-bold text-[#1D2026] text-sm tracking-tight"

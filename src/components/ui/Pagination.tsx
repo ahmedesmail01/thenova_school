@@ -1,3 +1,6 @@
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { cn } from "../../lib/utils";
+
 interface PaginationProps {
   current: number;
   total: number;
@@ -11,68 +14,79 @@ export function Pagination({
   onChange,
   className = "",
 }: PaginationProps) {
-  const pages = Array.from({ length: total }, (_, i) => i + 1);
+  const getPageRange = () => {
+    const range: (number | string)[] = [];
+    const delta = 1;
 
-  // Basic pagination logic (can be expanded for many pages)
-  const visiblePages = pages.slice(
-    Math.max(0, current - 3),
-    Math.min(total, current + 2),
-  );
+    for (let i = 1; i <= total; i++) {
+      if (
+        i === 1 ||
+        i === total ||
+        (i >= current - delta && i <= current + delta) ||
+        (current <= 3 && i <= 4) ||
+        (current >= total - 2 && i >= total - 3)
+      ) {
+        range.push(i);
+      } else if (range[range.length - 1] !== "...") {
+        range.push("...");
+      }
+    }
+    return range;
+  };
+
+  const pages = getPageRange();
 
   return (
-    <div className={`flex items-center justify-center gap-2 ${className}`}>
+    <div className={cn("flex items-center justify-center gap-2", className)}>
+      {/* Previous Button */}
       <button
         disabled={current === 1}
         onClick={() => onChange(current - 1)}
-        className="w-10 h-10 flex items-center justify-center rounded-lg border border-brand-border text-black disabled:opacity-30 hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-all"
+        className="w-11 h-11 flex items-center justify-center rounded-lg border border-[#E9EAF0] text-[#9099A8] transition-all hover:border-brand-blue/50 disabled:opacity-30 disabled:hover:border-[#E9EAF0]"
       >
-        ←
+        <ChevronLeft size={20} />
       </button>
 
-      {current > 3 && (
-        <>
+      {/* Page Numbers */}
+      {pages.map((p, idx) => {
+        if (p === "...") {
+          return (
+            <span key={`dots-${idx}`} className="text-[#9099A8] px-1">
+              ...
+            </span>
+          );
+        }
+
+        const isPageActive = current === p;
+
+        return (
           <button
-            onClick={() => onChange(1)}
-            className="w-10 h-10 text-text-secondary "
+            key={`page-${p}`}
+            onClick={() => onChange(p as number)}
+            className={cn(
+              "w-11 h-11 flex items-center justify-center rounded-lg border transition-all text-sm font-semibold",
+              isPageActive
+                ? "border-brand-blue text-brand-blue"
+                : "border-[#E9EAF0] text-[#4E5566] hover:border-brand-blue/50"
+            )}
           >
-            1
+            {p}
           </button>
-          <span className="text-text-muted">...</span>
-        </>
-      )}
+        );
+      })}
 
-      {visiblePages.map((p) => (
-        <button
-          key={p}
-          onClick={() => onChange(p)}
-          className={`w-10 h-10 rounded-lg border font-bold transition-all ${
-            current === p
-              ? "bg-brand-blue border-brand-blue text-white"
-              : "border-brand-border text-text-secondary hover:bg-brand-blue hover:text-white hover:border-brand-blue"
-          }`}
-        >
-          {p}
-        </button>
-      ))}
-
-      {current < total - 2 && (
-        <>
-          <span className="text-text-muted">...</span>
-          <button
-            onClick={() => onChange(total)}
-            className="w-10 h-10 text-text-secondary "
-          >
-            {total}
-          </button>
-        </>
-      )}
-
+      {/* Next Button */}
       <button
         disabled={current === total}
         onClick={() => onChange(current + 1)}
-        className="w-10 h-10 flex items-center justify-center rounded-lg border border-brand-border text-black disabled:opacity-30 hover:bg-brand-blue hover:text-white hover:border-brand-blue transition-all"
+        className={cn(
+          "w-11 h-11 flex items-center justify-center rounded-lg transition-all disabled:opacity-30",
+          current === total
+            ? "border border-[#E9EAF0] text-[#9099A8]"
+            : "bg-brand-blue text-white border border-brand-blue hover:bg-brand-blue/90"
+        )}
       >
-        →
+        <ChevronRight size={20} />
       </button>
     </div>
   );

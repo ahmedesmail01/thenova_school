@@ -32,7 +32,7 @@ function CoursesPage() {
       <div className="bg-white min-h-screen mt-16">
         {/* Hero banner */}
         <CoursesHero
-          onSearch={(q) => handleFilterChange({ ...filters, search: q })}
+          onSearch={(q) => handleFilterChange({ ...filters, title: q })}
           initialSearch={filters.search}
         />
 

@@ -41,14 +41,12 @@ export function CourseFilters({ filters, onChange }: CourseFiltersProps) {
   const packages = filterData?.packages || [];
 
   return (
-    <div className="flex flex-col gap-0 border max-h-[calc(95vh-100px)] overflow-y-auto border-[#E9EAF0] no-scrollbar">
+    <div className="flex flex-col gap-4 max-h-[calc(95vh-100px)] overflow-y-auto no-scrollbar pb-6 pr-0">
       {/* Category Section */}
       <FilterSection title="Category" isOpen={true}>
         <CategoryFilter
           categories={categories}
-          selectedSlugs={filters.category_slug || []}
           selectedSubcategorySlugs={filters.subcategory_slug || []}
-          onToggle={(slug) => handleToggle("category_slug", slug)}
           onToggleSubcategory={(slug) => handleToggle("subcategory_slug", slug)}
         />
       </FilterSection>
