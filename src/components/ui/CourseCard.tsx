@@ -83,12 +83,16 @@ export function CourseCard({
               >
                 View Details
               </button>
-              <button
-                onClick={() => onPackage?.(course.slug)}
-                className="py-3 px-4 bg-[#458FCE] text-white font-bold text-sm hover:bg-[#2563EB] transition-colors shadow-lg shadow-blue-500/20 rounded-sm"
-              >
-                Package
-              </button>
+              {course.available_in_package && (
+                <button
+                  onClick={() => onPackage?.(course.slug)}
+                  className="py-3 px-4 bg-[#458FCE] text-white font-bold text-sm hover:bg-[#2563EB] transition-colors shadow-lg shadow-blue-500/20 rounded-sm"
+                >
+                  {course.available_in_package?.length > 0
+                    ? course.available_in_package[0]
+                    : "Package"}
+                </button>
+              )}
             </div>
           ) : (
             <button

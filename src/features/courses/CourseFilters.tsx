@@ -27,6 +27,35 @@ export function CourseFilters({ filters, onChange }: CourseFiltersProps) {
     onChange({ ...filters, [key]: next.length ? next : undefined });
   };
 
+  const handlePackageToggle = (id: number, level: string | number | null) => {
+    const currentIds = (filters.package_id as (string | number)[] | undefined) || [];
+    const currentLevels = (filters.package_level as (string | number)[] | undefined) || [];
+
+    const isSelected = currentIds.includes(id) || currentIds.includes(String(id));
+    let nextIds: (string | number)[];
+    let nextLevels: (string | number)[];
+
+    if (isSelected) {
+      nextIds = currentIds.filter((i) => i !== id && i !== String(id));
+      const remainingSelectedPackages = (filterData?.packages || []).filter((p) => nextIds.includes(p.id) || nextIds.includes(String(p.id)));
+      const activeLevels = new Set(remainingSelectedPackages.map(p => p.level).filter(l => l != null));
+      nextLevels = Array.from(activeLevels) as (string | number)[];
+    } else {
+      nextIds = [...currentIds, id];
+      if (level != null && !currentLevels.includes(level) && !currentLevels.includes(String(level))) {
+        nextLevels = [...currentLevels, level];
+      } else {
+        nextLevels = currentLevels;
+      }
+    }
+
+    onChange({ 
+      ...filters, 
+      package_id: nextIds.length ? nextIds : undefined,
+      package_level: nextLevels.length ? nextLevels : undefined
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="p-4 border border-[#E9EAF0] text-sm text-[#4E5566]">
@@ -79,7 +108,7 @@ export function CourseFilters({ filters, onChange }: CourseFiltersProps) {
           <PackageFilter
             packages={packages}
             selectedIds={filters.package_id || []}
-            onToggle={(id) => handleToggle("package_id", id)}
+            onToggle={handlePackageToggle}
           />
         </FilterSection>
       )}

@@ -4,7 +4,7 @@ import { type RawPackage } from "../../courseQueries";
 interface PackageFilterProps {
   packages: RawPackage[];
   selectedIds: (string | number)[];
-  onToggle: (id: number) => void;
+  onToggle: (pkgId: number, levelVal: string | number | null) => void;
 }
 
 export function PackageFilter({
@@ -33,9 +33,9 @@ function PackageItem({
 }: {
   pkg: RawPackage;
   selectedIds: (string | number)[];
-  onToggle: (id: number) => void;
+  onToggle: (pkgId: number, levelVal: string | number | null) => void;
 }) {
-  const isActive = selectedIds.includes(pkg.id) || selectedIds.includes(pkg.id.toString());
+  const isActive = selectedIds.includes(pkg.id) || selectedIds.includes(String(pkg.id));
 
   return (
     <div className="flex flex-col border-b border-[#E9EAF0] last:border-b-0">
@@ -44,12 +44,14 @@ function PackageItem({
           "w-full flex items-center justify-between px-4 py-3.5 transition-colors cursor-pointer",
           isActive ? "bg-[#F5F7FA]" : "hover:bg-[#F5F7FA]",
         )}
-        onClick={() => onToggle(pkg.id)}
+        onClick={() => {
+          onToggle(pkg.id, pkg.level);
+        }}
       >
         <div className="flex items-center gap-3">
           <input
             type="checkbox"
-            checked={isActive}
+            checked={!!isActive}
             readOnly
             className="w-5 h-5 rounded border-[#D1D5DB] text-brand-blue focus:ring-brand-blue cursor-pointer"
           />
