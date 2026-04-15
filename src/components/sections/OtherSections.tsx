@@ -2,8 +2,8 @@
 const BackGroundPattern = "/images/bg-pattern.svg";
 const LadyWithCircles = "/images/story-img.png";
 const pkgTriangle = "/images/pkg-triangle.png";
-const eventsBanner = "/images/events-banner.png";
 
+import { useState } from "react";
 import { Button } from "../ui/Button";
 
 export function StorySection() {
@@ -257,29 +257,252 @@ function PackageCard({ pkg }: { pkg: PackageData }) {
   );
 }
 
-export function EventsSection() {
-  return (
-    <section className="py-24 bg-white" id="events">
-      <div className="max-w-[1200px] mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-16 space-y-3">
-          <h2 className="text-4xl md:text-[40px] font-bold text-[#1a202c] font-playfair uppercase tracking-wide">
-            EVENTS
-          </h2>
-          <p className="text-[#a0aec0] text-sm md:text-md font-montserrat">
-            What drives our vision and shapes everything we do
-          </p>
-        </div>
+const GridImage = ({
+  src,
+  className = "",
+  mobileHeightClass = "h-48 md:h-64",
+  onClick,
+}: {
+  src: string;
+  className?: string;
+  mobileHeightClass?: string;
+  onClick?: () => void;
+}) => (
+  <div
+    className={`rounded-[20px] overflow-hidden relative group bg-gray-100 cursor-pointer ${className}`}
+    onClick={onClick}
+  >
+    <img
+      src={src}
+      alt="Event Gallery"
+      className={`w-full ${mobileHeightClass} lg:h-full lg:absolute lg:inset-0 object-cover transition-transform duration-700 group-hover:scale-105`}
+    />
+    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+  </div>
+);
 
-        {/* Banner Image */}
-        <div className="flex justify-center w-full">
-          <img
-            src={eventsBanner}
-            alt="Events"
-            className="w-full h-auto object-contain"
-          />
+export function EventsSection() {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const dummyImages = [
+    "/images/gallery/gallery-01.png", // Track 1 - 1
+    "/images/gallery/gallery-02.png", // Track 1 - 2
+    "/images/gallery/gallery-03.png", // Track 1 - 3
+    "/images/gallery/gallery-04.png", // Track 2 - Top Tall
+    "/images/gallery/gallery-05.png", // Track 2 - Bot Left
+    "/images/gallery/gallery-06.png", // Track 2 - Bot Right
+    "/images/gallery/gallery-07.png", // Track 3 - Top Left
+    "/images/gallery/gallery-08.png", // Track 3 - Top Right
+    "/images/gallery/gallery-09.png", // Track 3 - Bot Tall
+    "/images/gallery/gallery-10.png", // Track 4 - 1
+    "/images/gallery/gallery-11.png", // Track 4 - 2
+    "/images/gallery/gallery-12.png", // Track 4 - 3
+  ];
+
+  const closeLightbox = () => setSelectedIndex(null);
+  const nextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedIndex((prev) =>
+      prev === null ? null : (prev + 1) % dummyImages.length
+    );
+  };
+  const prevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedIndex((prev) =>
+      prev === null
+        ? null
+        : (prev - 1 + dummyImages.length) % dummyImages.length
+    );
+  };
+
+  return (
+    <>
+      <section className="py-24 bg-white" id="events">
+        <div className="max-w-[1400px] mx-auto px-4 lg:px-[80px]">
+          {/* Header */}
+          <div className="text-center mb-16 space-y-3">
+            <h2 className="text-4xl md:text-[40px] font-bold text-[#1a202c] font-playfair uppercase tracking-wide">
+              EVENTS
+            </h2>
+            <p className="text-[#a0aec0] text-sm md:text-md font-montserrat">
+              What drives our vision and shapes everything we do
+            </p>
+          </div>
+
+          {/* Masonry Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3 lg:h-[500px]">
+            {/* Track 1 */}
+            <div className="col-span-1 flex flex-col gap-3">
+              <GridImage
+                src={dummyImages[0]}
+                // onClick={() => setSelectedIndex(0)}
+                className="lg:flex-1"
+              />
+              <GridImage
+                src={dummyImages[1]}
+                // onClick={() => setSelectedIndex(1)}
+                className="lg:flex-1"
+              />
+              <GridImage
+                src={dummyImages[2]}
+                // onClick={() => setSelectedIndex(2)}
+                className="lg:flex-1"
+              />
+            </div>
+
+            {/* Track 2 */}
+            <div className="col-span-1 lg:col-span-2 flex flex-col gap-3">
+              <GridImage
+                src={dummyImages[3]}
+                // onClick={() => setSelectedIndex(3)}
+                className="lg:flex-[6]"
+                mobileHeightClass="h-[350px] md:h-[400px]"
+              />
+              <div className="lg:flex-[4] grid grid-cols-2 gap-3 h-[200px] md:h-[250px] lg:h-auto">
+                <GridImage
+                  src={dummyImages[4]}
+                  // onClick={() => setSelectedIndex(4)}
+                  className="h-full"
+                  mobileHeightClass="h-full"
+                />
+                <GridImage
+                  src={dummyImages[5]}
+                  // onClick={() => setSelectedIndex(5)}
+                  className="h-full"
+                  mobileHeightClass="h-full"
+                />
+              </div>
+            </div>
+
+            {/* Track 3 */}
+            <div className="col-span-1 lg:col-span-2 flex flex-col gap-3">
+              <div className="lg:flex-[4] grid grid-cols-2 gap-3 h-[200px] md:h-[250px] lg:h-auto">
+                <GridImage
+                  src={dummyImages[6]}
+                  // onClick={() => setSelectedIndex(6)}
+                  className="h-full"
+                  mobileHeightClass="h-full"
+                />
+                <GridImage
+                  src={dummyImages[7]}
+                  // onClick={() => setSelectedIndex(7)}
+                  className="h-full"
+                  mobileHeightClass="h-full"
+                />
+              </div>
+              <GridImage
+                src={dummyImages[8]}
+                // onClick={() => setSelectedIndex(8)}
+                className="lg:flex-[6]"
+                mobileHeightClass="h-[350px] md:h-[400px]"
+              />
+            </div>
+
+            {/* Track 4 */}
+            <div className="col-span-1 flex flex-col gap-3">
+              <GridImage
+                src={dummyImages[9]}
+                // onClick={() => setSelectedIndex(9)}
+                className="lg:flex-1"
+              />
+              <GridImage
+                src={dummyImages[10]}
+                // onClick={() => setSelectedIndex(10)}
+                className="lg:flex-1"
+              />
+              <GridImage
+                src={dummyImages[11]}
+                // onClick={() => setSelectedIndex(11)}
+                className="lg:flex-1"
+              />
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* Lightbox Modal */}
+      {selectedIndex !== null && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/95 flex flex-col items-center justify-center p-4 backdrop-blur-sm"
+          onClick={closeLightbox}
+        >
+          {/* Close Button */}
+          <button
+            className="absolute top-4 right-4 md:top-8 md:right-8 text-white/70 hover:text-white transition-colors p-2 z-50"
+            onClick={closeLightbox}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+
+          {/* Prev Button */}
+          <button
+            className="absolute left-4 md:left-12 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors p-4 z-50"
+            onClick={prevImage}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          {/* Main Image Container */}
+          <div className="relative w-[90vw] max-w-[400px] aspect-square md:aspect-[4/3] flex items-center justify-center bg-black/20 rounded-2xl overflow-hidden shadow-2xl">
+            <img
+              src={dummyImages[selectedIndex]}
+              alt={`Gallery Event ${selectedIndex + 1}`}
+              className="w-full h-full object-cover"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+
+          {/* Next Button */}
+          <button
+            className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 text-white/50 hover:text-white transition-colors p-4 z-50"
+            onClick={nextImage}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+
+          {/* Indicator */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/80 font-medium tracking-widest text-sm bg-black/40 px-4 py-2 rounded-full">
+            {selectedIndex + 1} / {dummyImages.length}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

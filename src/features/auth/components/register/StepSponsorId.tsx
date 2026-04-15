@@ -10,7 +10,7 @@ import { type SponsorIdSchema, sponsorIdSchema } from "../../schemas";
 export function StepSponsorId({
   onNext,
 }: {
-  onNext: (d: SponsorIdSchema) => void;
+  onNext: (d: SponsorIdSchema & { sponsorName?: string }) => void;
 }) {
   const [serverError, setServerError] = useState<string | null>(null);
   const {
@@ -27,7 +27,7 @@ export function StepSponsorId({
       const data = response.data;
       if (data?.status) {
         setServerError(null);
-        onNext({ sponsorId });
+        onNext({ sponsorId, sponsorName: data["sponsor name"] });
       } else if (data?.message) {
         const msgField = data.message as
           | string

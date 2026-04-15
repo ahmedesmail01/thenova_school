@@ -4,11 +4,12 @@ import {
   useNavigate,
   useSearch,
 } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Stepper } from "../components/ui/Stepper";
 import { useAuthStore } from "../features/auth/useAuthStore";
 import type { SignUpData } from "../features/auth/schemas";
 import logo from "../../public/images/nova-logo.png";
+import api from "../lib/api";
 import { StepSponsorId } from "../features/auth/components/register/StepSponsorId";
 import { StepConfirmSponsorId } from "../features/auth/components/register/StepConfirmSponsorId";
 import { StepAccountDetails } from "../features/auth/components/register/StepAccountDetails";
@@ -40,6 +41,22 @@ function RegisterPage() {
   const [formData, setFormData] = useState<SignUpData>({
     sponsorId: search.sponsorId,
   });
+
+  useEffect(() => {
+    if (search.sponsorId && !formData.sponsorName) {
+      api
+        .get(`/sponsor-data/${search.sponsorId}`)
+        .then((response) => {
+          if (response.data?.status) {
+            setFormData((prev) => ({
+              ...prev,
+              sponsorName: response.data["sponsor name"],
+            }));
+          }
+        })
+        .catch((err) => console.error("Failed to load sponsor name", err));
+    }
+  }, [search.sponsorId, formData.sponsorName]);
 
   const next = (data: Partial<SignUpData>) => {
     setFormData((prev) => ({ ...prev, ...data }));
@@ -83,10 +100,17 @@ function RegisterPage() {
             </h1>
             <p className="text-[20px] text-white ">
               {step === 0 && "Enter your details to create your member account"}
-              {step === 1 &&
-                "Are you sure you want to join under the Sponsor ID:" +
-                  " " +
-                  formData.sponsorId}
+              {step === 1 && (
+                <div>
+                  Are you sure you want to join under the Sponsor ID:{" "}
+                  <span className="text-brand-blue-light">
+                    {formData.sponsorId}
+                  </span>
+                  <p className="block">
+                    Sponser Name : {formData.sponsorName || "Loading..."}
+                  </p>
+                </div>
+              )}
               {step === 2 && "Enter your details to create your member account"}
               {step === 3 && "Create your PIN"}
               {step === 4 &&
@@ -124,7 +148,9 @@ function RegisterPage() {
             Already have an account?{" "}
             <Link
               to="/login"
-              search={search.redirect ? { redirect: search.redirect } : undefined}
+              search={
+                search.redirect ? { redirect: search.redirect } : undefined
+              }
               className="text-white font-semibold hover:text-brand-blue-light underline underline-offset-2 transition-colors"
             >
               Login →

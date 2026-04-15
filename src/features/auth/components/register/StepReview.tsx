@@ -33,7 +33,7 @@ export function StepReview({
       formData.append("country", data.country ?? "");
       formData.append("password", data.password ?? "");
       formData.append("password_confirmation", data.confirmPassword ?? "");
-      formData.append("sponsor_id", data.sponsorId ?? "");
+      formData.append("sponsor_id", String(data.sponsorId ?? ""));
       formData.append("username", data.username ?? "");
       formData.append("pin_code", data.pin ?? "");
 
@@ -83,7 +83,11 @@ export function StepReview({
     onError: (error: any) => {
       const message = error.response?.data?.message;
       const msg =
-        typeof message === "string" ? message : message?.image?.[0] || message?.email?.[0] || message?.username?.[0];
+        typeof message === "string"
+          ? message
+          : message?.image?.[0] ||
+            message?.email?.[0] ||
+            message?.username?.[0];
       toast.error(msg || "Registration failed. Please check your inputs.");
     },
   });
@@ -98,7 +102,7 @@ export function StepReview({
     },
     { label: "Country", value: data.country },
     { label: "Email", value: data.email },
-    { label: "Sponsor ID", value: `${data.sponsorId} ()` },
+    { label: "Sponsor ID", value: `${data.sponsorId} (${data.sponsorName})` },
   ];
 
   return (

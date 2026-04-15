@@ -23,7 +23,7 @@ export const accountDetailsSchema = z
       .string()
       .min(3, "Username must be at least 3 characters")
       .regex(/^[a-zA-Z0-9_]+$/, "Only letters, numbers, underscores"),
-    sponsorId: z.string().min(1),
+    sponsorId: z.union([z.string().min(1), z.number()]),
     countryCode: z.string().min(1),
     phone: z.string().min(7, "Invalid phone number"),
     country: z.string().min(1),
@@ -44,4 +44,5 @@ export type AccountDetailsSchema = z.infer<typeof accountDetailsSchema>;
 
 export type SignUpData = Partial<AccountDetailsSchema> & {
   pin?: string;
+  sponsorName?: string;
 };
